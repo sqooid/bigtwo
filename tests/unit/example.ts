@@ -1,8 +1,8 @@
 import { expect } from 'chai'
 import rewire from 'rewire'
-import { addTwo } from '@/functions'
+import { addTwo } from '@/example'
 
-const index = rewire('@/functions.ts') // For un-exported functions
+const index = rewire('@/example.ts') // For un-exported functions
 
 describe('index.ts', () => {
   it('addOne function', () => {
