@@ -1,22 +1,21 @@
 import { Card, newCard, Suit } from '@/interfaces/deck'
-import { defineCustomElement } from 'vue'
 
 const deckCardCount = 52
 
-export enum DealExtraOptions {
-  FOURTWOS = 1 << 0,
-  NOFACES = 1 << 1,
-  DISTRIBUTEALL = 1 << 2,
-}
-
 export interface DealOptions {
+  // Number of players
   playerCount: number
-  extra?: DealExtraOptions
+  // Reshuffle if any player holds all two's
+  fourTwos?: boolean
+  // Reshuffle if any player has no face cards
+  noFaces?: boolean
+  // Distribute all cards if less than four players
+  distributeAll?: boolean
 }
 
-// export function deal(options: DealOptions): Card[][] {
-//   const deck = shuffle(createDeck())
-// }
+export function deal(options: DealOptions): Card[][] {
+  const deck = shuffle(createDeck())
+}
 
 /**
  *
