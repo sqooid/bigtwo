@@ -57,6 +57,19 @@ export function cardGreater(card1: Card, card2: Card): boolean {
   return false
 }
 
+/**
+ * Sorts cards in place and also returns sorted array
+ * @param cards
+ * @returns
+ */
+export function sortCards(cards: Card[]): Card[] {
+  cards.sort((a, b) => {
+    if (cardGreater(a, b)) return 1
+    return -1
+  })
+  return cards
+}
+
 export function newCard(suit: Suit, value: number) {
   if (value < 1 || value > 13) throw new Error('invalid card creation')
   return { suit, value }

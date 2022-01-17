@@ -1,5 +1,13 @@
 import { newCard, nextValue, Suit } from '@/interfaces/deck'
-import { isPair, isStraight, isTriple } from '@/interfaces/play'
+import {
+  isBomb,
+  isFlush,
+  isFullHouse,
+  isPair,
+  isQuad,
+  isStraight,
+  isTriple,
+} from '@/interfaces/play'
 import { expect } from 'chai'
 
 describe('play.ts', () => {
@@ -26,6 +34,24 @@ describe('play.ts', () => {
       newCard(Suit.CLUB, 3),
     ]
     expect(isTriple(cards)).false
+  })
+  it('isQuad positive', () => {
+    const cards = [
+      newCard(Suit.HEART, 4),
+      newCard(Suit.SPADE, 4),
+      newCard(Suit.CLUB, 4),
+      newCard(Suit.DIAMOND, 4),
+    ]
+    expect(isQuad(cards)).true
+  })
+  it('isQuad negative', () => {
+    const cards = [
+      newCard(Suit.HEART, 3),
+      newCard(Suit.SPADE, 4),
+      newCard(Suit.CLUB, 4),
+      newCard(Suit.DIAMOND, 4),
+    ]
+    expect(isQuad(cards)).false
   })
   it('nextValue from 2', () => {
     expect(nextValue(2)).to.be.undefined
@@ -78,5 +104,75 @@ describe('play.ts', () => {
       newCard(Suit.HEART, 9),
     ]
     expect(isStraight(cards)).false
+  })
+  it('isFlush positive', () => {
+    const cards = [
+      newCard(Suit.HEART, 5),
+      newCard(Suit.HEART, 7),
+      newCard(Suit.HEART, 7),
+      newCard(Suit.HEART, 8),
+      newCard(Suit.HEART, 9),
+    ]
+    expect(isFlush(cards)).true
+  })
+  it('isFlush negative', () => {
+    const cards = [
+      newCard(Suit.SPADE, 5),
+      newCard(Suit.HEART, 7),
+      newCard(Suit.HEART, 7),
+      newCard(Suit.HEART, 8),
+      newCard(Suit.HEART, 9),
+    ]
+    expect(isFlush(cards)).false
+  })
+  it('isFullHouse positive triple first', () => {
+    const cards = [
+      newCard(Suit.SPADE, 7),
+      newCard(Suit.HEART, 8),
+      newCard(Suit.HEART, 7),
+      newCard(Suit.HEART, 8),
+      newCard(Suit.HEART, 7),
+    ]
+    expect(isFullHouse(cards)).true
+  })
+  it('isFullHouse positive triple second', () => {
+    const cards = [
+      newCard(Suit.SPADE, 7),
+      newCard(Suit.HEART, 8),
+      newCard(Suit.HEART, 7),
+      newCard(Suit.HEART, 8),
+      newCard(Suit.HEART, 8),
+    ]
+    expect(isFullHouse(cards)).true
+  })
+  it('isFullHouse negative', () => {
+    const cards = [
+      newCard(Suit.SPADE, 7),
+      newCard(Suit.HEART, 7),
+      newCard(Suit.HEART, 1),
+      newCard(Suit.HEART, 8),
+      newCard(Suit.HEART, 8),
+    ]
+    expect(isFullHouse(cards)).false
+  })
+  it('isBomb positive', () => {
+    const cards = [
+      newCard(Suit.SPADE, 7),
+      newCard(Suit.HEART, 7),
+      newCard(Suit.HEART, 1),
+      newCard(Suit.HEART, 7),
+      newCard(Suit.HEART, 7),
+    ]
+    expect(isBomb(cards)).true
+  })
+  it('isBomb negative', () => {
+    const cards = [
+      newCard(Suit.SPADE, 7),
+      newCard(Suit.HEART, 2),
+      newCard(Suit.HEART, 1),
+      newCard(Suit.HEART, 7),
+      newCard(Suit.HEART, 7),
+    ]
+    expect(isBomb(cards)).false
   })
 })
