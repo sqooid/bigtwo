@@ -7,7 +7,7 @@ interface State {
   board: Play[]
 }
 
-class Game {
+export class Game {
   /**
    * Current state of the game
    */
@@ -17,10 +17,19 @@ class Game {
    */
   history: State[]
 
+  constructor() {
+    this.state = { players: [], board: [] }
+    this.history = []
+  }
+
   dealCards(options: DealOptions) {
     const hands = deal(options)
     for (const hand of hands) {
       this.state.players.push({ cards: hand })
     }
   }
+}
+
+export function createGame(): Game {
+  return new Game()
 }
