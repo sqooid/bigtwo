@@ -1,5 +1,6 @@
-import { Player } from '@/classes/player'
-import { Play } from '@/interfaces/game'
+import { Player } from '@/interfaces/player'
+import { Play } from '@/interfaces/hands'
+import { deal, DealOptions } from '@/deal'
 
 interface State {
   players: Player[]
@@ -15,4 +16,11 @@ class Game {
    * Past states
    */
   history: State[]
+
+  dealCards(options: DealOptions) {
+    const hands = deal(options)
+    for (const hand of hands) {
+      this.state.players.push({ cards: hand })
+    }
+  }
 }
