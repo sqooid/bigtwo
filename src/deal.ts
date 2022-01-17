@@ -13,9 +13,9 @@ export interface DealOptions {
   distributeAll?: boolean
 }
 
-export function deal(options: DealOptions): Card[][] {
-  const deck = shuffle(createDeck())
-}
+// export function deal(options: DealOptions): Card[][] {
+//   const deck = shuffle(createDeck())
+// }
 
 /**
  *
