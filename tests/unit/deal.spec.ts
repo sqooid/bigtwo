@@ -8,6 +8,7 @@ const hasCard = deal.__get__('hasCard')
 const splitDeck = deal.__get__('splitDeck')
 const handGetsExtra = deal.__get__('handGetsExtra')
 const hasFourTwos = deal.__get__('hasFourTwos')
+const hasNoFaces = deal.__get__('hasNoFaces')
 
 describe('deal.ts', () => {
   it('createDeck has 52 cards', () => {
@@ -173,5 +174,29 @@ describe('deal.ts', () => {
     ]
     const res = hasFourTwos(hand)
     expect(res).false
+  })
+  it('hasNoFaces true negative', () => {
+    const hand = [
+      newCard(Suit.DIAMOND, 2),
+      newCard(Suit.CLUB, 10),
+      newCard(Suit.HEART, 2),
+      newCard(Suit.SPADE, 12),
+      newCard(Suit.SPADE, 1),
+      newCard(Suit.SPADE, 8),
+    ]
+    const res = hasNoFaces(hand)
+    expect(res).false
+  })
+  it('hasNoFaces true positive', () => {
+    const hand = [
+      newCard(Suit.DIAMOND, 2),
+      newCard(Suit.CLUB, 10),
+      newCard(Suit.HEART, 2),
+      newCard(Suit.SPADE, 9),
+      newCard(Suit.SPADE, 1),
+      newCard(Suit.SPADE, 8),
+    ]
+    const res = hasNoFaces(hand)
+    expect(res).true
   })
 })

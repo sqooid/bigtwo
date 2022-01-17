@@ -24,6 +24,13 @@ export function deal(options: DealOptions): Card[][] {
   }
 }
 
+function hasNoFaces(hand: Card[]): boolean {
+  for (const card of hand) {
+    if (card.value > 10) return false
+  }
+  return true
+}
+
 function hasFourTwos(hand: Card[]): boolean {
   let count = 0
   for (const card of hand) {
