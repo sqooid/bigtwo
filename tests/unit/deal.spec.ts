@@ -10,6 +10,7 @@ const splitDeck = dealRewire.__get__('splitDeck')
 const handGetsExtra = dealRewire.__get__('handGetsExtra')
 const hasFourTwos = dealRewire.__get__('hasFourTwos')
 const hasNoFaces = dealRewire.__get__('hasNoFaces')
+const moveDiamondThree = dealRewire.__get__('moveDiamondThree')
 
 describe('deal.ts', () => {
   it('createDeck has 52 cards', () => {
@@ -242,5 +243,10 @@ describe('deal.ts', () => {
         })
         return count === 52
       })
+  })
+  it('moveDiamondThree', () => {
+    const deck = createDeck()
+    moveDiamondThree(deck)
+    expect(deck[0]).to.eql(newCard(Suit.DIAMOND, 3))
   })
 })

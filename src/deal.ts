@@ -1,4 +1,4 @@
-import { Card, newCard, Suit } from '@/interfaces/deck'
+import { Card, cardsEqual, newCard, Suit } from '@/interfaces/deck'
 
 const DECK_COUNT = 52
 const HAND_COUNT = 13
@@ -14,6 +14,11 @@ export interface DealOptions {
   distributeAll?: boolean
 }
 
+/**
+ * Deals with first player always having diamond 3
+ * @param options
+ * @returns
+ */
 export function deal(options: DealOptions): Card[][] {
   const deck = shuffle(createDeck())
   let hands
@@ -32,6 +37,18 @@ export function deal(options: DealOptions): Card[][] {
     break
   }
   return hands
+}
+
+/**
+ * Moves the Diamond 3 card to the front of the deck
+ * @param deck
+ */
+function moveDiamondThree(deck: Card[]) {
+  const d3 = newCard(Suit.DIAMOND, 3)
+  const index = deck.findIndex((card) => cardsEqual(d3, card))
+  const temp = deck[0]
+  deck[0] = d3
+  deck[index] = temp
 }
 
 function hasNoFaces(hand: Card[]): boolean {
