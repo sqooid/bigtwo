@@ -15,6 +15,7 @@ export interface DealOptions {
 
 // export function deal(options: DealOptions): Card[][] {
 //   const deck = shuffle(createDeck())
+//   const hands = splitDeck(deck, options.playerCount)
 // }
 
 /**
@@ -24,7 +25,7 @@ export interface DealOptions {
  * @returns Cards split evenly
  */
 function splitDeck(deck: Card[], players: number): Card[][] {
-  const count = Math.floor(deckCardCount / players)
+  const count = Math.floor(deck.length / players)
   const hands: Card[][] = []
   for (let i = 0; i < players; ++i) {
     const hand = deck.slice(i * count, i * count + count)
@@ -33,17 +34,19 @@ function splitDeck(deck: Card[], players: number): Card[][] {
   if (players !== 3) return hands
   // Distribute leftover card (if there are three players)
   const extraIndex = handGetsExtra(hands)
-  hands[extraIndex].push(deck[-1])
+  hands[extraIndex].push(deck[deck.length - 1])
 
   return hands
 }
 
 function handGetsExtra(hands: Card[][]): number {
+  const d3 = newCard(Suit.DIAMOND, 3)
   for (let index = 0; index < hands.length; ++index) {
-    if (hasCard(hands[index], newCard(Suit.DIAMOND, 3))) return index
+    if (hasCard(hands[index], d3)) return index
   }
+  const c3 = newCard(Suit.CLUB, 3)
   for (let index = 0; index < hands.length; ++index) {
-    if (hasCard(hands[index], newCard(Suit.CLUB, 3))) return index
+    if (hasCard(hands[index], c3)) return index
   }
 }
 

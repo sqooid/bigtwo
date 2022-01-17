@@ -106,23 +106,47 @@ describe('deal.ts', () => {
   })
   it('splitDeck 4 players correct count', () => {
     const deck = createDeck()
-    const split = splitDeck(deck)
+    const split: Card[][] = splitDeck(deck, 4)
     expect(
       split.every((hand) => {
-        return hand.length === deck / 4
+        return hand.length === 13
       }),
-    )
+    ).true
   })
-  it('splitDeck 3 players correct count', () => {
-    const deck = createDeck()
-    const split: Card[][] = splitDeck(deck)
-    const extraCardIndex = split.findIndex((hand) => {
-      return hasCard(hand, newCard(Suit.DIAMOND, 3))
-    })
-    expect(
-      split.every((hand) => {
-        return hand.length === deck / 4
-      }),
-    )
+  it('splitDeck 3 players correct count diamond 3 last', () => {
+    const deck = [
+      newCard(Suit.CLUB, 4),
+      newCard(Suit.HEART, 1),
+      newCard(Suit.CLUB, 3),
+      newCard(Suit.DIAMOND, 6),
+      newCard(Suit.HEART, 11),
+      newCard(Suit.CLUB, 8),
+      newCard(Suit.SPADE, 5),
+      newCard(Suit.HEART, 3),
+      newCard(Suit.CLUB, 6),
+      newCard(Suit.DIAMOND, 3),
+    ]
+    const split: Card[][] = splitDeck(deck, 3)
+    expect(split[0]).to.have.lengthOf(4) &&
+      expect(split[1]).to.have.lengthOf(3) &&
+      expect(split[2]).to.have.lengthOf(3)
+  })
+  it('splitDeck 3 players correct count diamond 3 not last', () => {
+    const deck = [
+      newCard(Suit.CLUB, 4),
+      newCard(Suit.HEART, 1),
+      newCard(Suit.CLUB, 3),
+      newCard(Suit.DIAMOND, 6),
+      newCard(Suit.HEART, 11),
+      newCard(Suit.CLUB, 8),
+      newCard(Suit.SPADE, 5),
+      newCard(Suit.HEART, 3),
+      newCard(Suit.DIAMOND, 3),
+      newCard(Suit.CLUB, 6),
+    ]
+    const split: Card[][] = splitDeck(deck, 3)
+    expect(split[0]).to.have.lengthOf(3) &&
+      expect(split[1]).to.have.lengthOf(3) &&
+      expect(split[2]).to.have.lengthOf(4)
   })
 })
