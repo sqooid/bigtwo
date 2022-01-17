@@ -20,10 +20,11 @@ export interface DealOptions {
  * @returns
  */
 export function deal(options: DealOptions): Card[][] {
-  const deck = shuffle(createDeck())
+  const deck = createDeck()
   let hands
   while (true) {
     // Keep reshuffling until valid hands are made
+    moveDiamondThree(shuffle(deck))
     hands = splitDeck(deck, options.playerCount)
     if (!options.distributeAll) {
       hands.forEach((hand) => {
@@ -40,7 +41,7 @@ export function deal(options: DealOptions): Card[][] {
 }
 
 /**
- * Moves the Diamond 3 card to the front of the deck
+ * Moves the Diamond 3 card to the front of the deck in place
  * @param deck
  */
 function moveDiamondThree(deck: Card[]) {
@@ -49,6 +50,7 @@ function moveDiamondThree(deck: Card[]) {
   const temp = deck[0]
   deck[0] = d3
   deck[index] = temp
+  return deck
 }
 
 function hasNoFaces(hand: Card[]): boolean {

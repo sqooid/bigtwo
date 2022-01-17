@@ -1,5 +1,5 @@
 import { deal } from '@/deal'
-import { Card, newCard, Suit } from '@/interfaces/deck'
+import { Card, cardsEqual, newCard, Suit } from '@/interfaces/deck'
 import { expect } from 'chai'
 import rewire from 'rewire'
 
@@ -201,6 +201,12 @@ describe('deal.ts', () => {
     const res = hasNoFaces(hand)
     expect(res).true
   })
+  it('deal: first player has diamond 3', () => {
+    const hands = deal({ playerCount: 4 })
+    expect(
+      hands[0].findIndex((card) => cardsEqual(newCard(Suit.DIAMOND, 3), card)),
+    ).to.not.equal(-1)
+  })
   it('deal: 4 players no options', () => {
     const hands = deal({ playerCount: 4 })
     expect(hands, '4 hands').to.have.lengthOf(4) &&
@@ -244,7 +250,7 @@ describe('deal.ts', () => {
         return count === 52
       })
   })
-  it('moveDiamondThree', () => {
+  it('moveDiamondThree works correctly', () => {
     const deck = createDeck()
     moveDiamondThree(deck)
     expect(deck[0]).to.eql(newCard(Suit.DIAMOND, 3))

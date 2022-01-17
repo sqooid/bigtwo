@@ -17,7 +17,6 @@ describe('game.ts', () => {
     game.dealCards({
       playerCount: 3,
     })
-    console.log(util.inspect(game, false, null, true))
     expect(game.state.players).to.have.lengthOf(3)
   })
 })
