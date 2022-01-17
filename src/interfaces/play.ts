@@ -15,3 +15,7 @@ export interface Play {
   combo: Hand
   cards: Card[]
 }
+
+export function playGreater(play1: Play, play2: Play): boolean {
+  return true
+}

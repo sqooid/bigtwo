@@ -1,8 +1,9 @@
 import { Player } from '@/interfaces/player'
-import { Play } from '@/interfaces/hands'
+import { Play } from '@/interfaces/play'
 import { deal, DealOptions } from '@/deal'
 
 interface State {
+  turn: number
   players: Player[]
   board: Play[]
 }
@@ -18,7 +19,7 @@ export class Game {
   history: State[]
 
   constructor() {
-    this.state = { players: [], board: [] }
+    this.state = { turn: 0, players: [], board: [] }
     this.history = []
   }
 
@@ -27,6 +28,10 @@ export class Game {
     for (const hand of hands) {
       this.state.players.push({ cards: hand })
     }
+  }
+
+  makePlay(play: Play) {
+    return
   }
 }
 
