@@ -6,6 +6,7 @@ import {
   isPair,
   isQuad,
   isStraight,
+  isStraightFlush,
   isTriple,
 } from '@/interfaces/play'
 import { expect } from 'chai'
@@ -174,5 +175,45 @@ describe('play.ts', () => {
       newCard(Suit.HEART, 7),
     ]
     expect(isBomb(cards)).false
+  })
+  it('isStraightFlush positive', () => {
+    const cards = [
+      newCard(Suit.HEART, 3),
+      newCard(Suit.HEART, 4),
+      newCard(Suit.HEART, 5),
+      newCard(Suit.HEART, 6),
+      newCard(Suit.HEART, 7),
+    ]
+    expect(isStraightFlush(cards)).true
+  })
+  it('isStraightFlush negative cross', () => {
+    const cards = [
+      newCard(Suit.HEART, 2),
+      newCard(Suit.HEART, 3),
+      newCard(Suit.HEART, 4),
+      newCard(Suit.HEART, 5),
+      newCard(Suit.HEART, 6),
+    ]
+    expect(isStraightFlush(cards)).false
+  })
+  it('isStraightFlush negative suit', () => {
+    const cards = [
+      newCard(Suit.SPADE, 3),
+      newCard(Suit.HEART, 4),
+      newCard(Suit.HEART, 5),
+      newCard(Suit.HEART, 6),
+      newCard(Suit.HEART, 7),
+    ]
+    expect(isStraightFlush(cards)).false
+  })
+  it('isStraightFlush negative number', () => {
+    const cards = [
+      newCard(Suit.HEART, 3),
+      newCard(Suit.HEART, 4),
+      newCard(Suit.HEART, 5),
+      newCard(Suit.HEART, 6),
+      newCard(Suit.HEART, 8),
+    ]
+    expect(isStraightFlush(cards)).false
   })
 })
