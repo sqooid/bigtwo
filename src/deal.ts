@@ -1,6 +1,7 @@
 import { Card, newCard, Suit } from '@/interfaces/deck'
 
-const deckCardCount = 52
+const DECK_COUNT = 52
+const HAND_COUNT = 13
 
 export interface DealOptions {
   // Number of players
@@ -13,10 +14,23 @@ export interface DealOptions {
   distributeAll?: boolean
 }
 
-// export function deal(options: DealOptions): Card[][] {
-//   const deck = shuffle(createDeck())
-//   const hands = splitDeck(deck, options.playerCount)
-// }
+export function deal(options: DealOptions): Card[][] {
+  const deck = shuffle(createDeck())
+  const hands = splitDeck(deck, options.playerCount)
+  if (!options.distributeAll) {
+    hands.forEach((hand) => {
+      hand.splice(HAND_COUNT)
+    })
+  }
+}
+
+function hasFourTwos(hand: Card[]): boolean {
+  let count = 0
+  for (const card of hand) {
+    if (card.value === 2) ++count
+  }
+  return count === 4
+}
 
 /**
  *
