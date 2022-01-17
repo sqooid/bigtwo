@@ -1,14 +1,15 @@
+import { deal } from '@/deal'
 import { Card, newCard, Suit } from '@/interfaces/deck'
 import { expect } from 'chai'
 import rewire from 'rewire'
 
-const deal = rewire('@/deal.ts')
-const createDeck = deal.__get__('createDeck')
-const hasCard = deal.__get__('hasCard')
-const splitDeck = deal.__get__('splitDeck')
-const handGetsExtra = deal.__get__('handGetsExtra')
-const hasFourTwos = deal.__get__('hasFourTwos')
-const hasNoFaces = deal.__get__('hasNoFaces')
+const dealRewire = rewire('@/deal.ts')
+const createDeck = dealRewire.__get__('createDeck')
+const hasCard = dealRewire.__get__('hasCard')
+const splitDeck = dealRewire.__get__('splitDeck')
+const handGetsExtra = dealRewire.__get__('handGetsExtra')
+const hasFourTwos = dealRewire.__get__('hasFourTwos')
+const hasNoFaces = dealRewire.__get__('hasNoFaces')
 
 describe('deal.ts', () => {
   it('createDeck has 52 cards', () => {
@@ -198,5 +199,48 @@ describe('deal.ts', () => {
     ]
     const res = hasNoFaces(hand)
     expect(res).true
+  })
+  it('deal: 4 players no options', () => {
+    const hands = deal({ playerCount: 4 })
+    expect(hands, '4 hands').to.have.lengthOf(4) &&
+      expect(hands, '13 cards').satisfies((hands) => {
+        return hands.every((hand) => hand.length === 13)
+      })
+  })
+  it('deal: 3 players no options', () => {
+    const hands = deal({ playerCount: 3 })
+    expect(hands, '3 hands').to.have.lengthOf(3) &&
+      expect(hands, '13 cards').satisfies((hands) => {
+        return hands.every((hand) => hand.length === 13)
+      })
+  })
+  it('deal: 2 players no options', () => {
+    const hands = deal({ playerCount: 2 })
+    expect(hands, '2 hands').to.have.lengthOf(2) &&
+      expect(hands, '13 cards').satisfies((hands) => {
+        return hands.every((hand) => hand.length === 13)
+      })
+  })
+  it('deal: 3 players, dist all', () => {
+    const hands = deal({ playerCount: 3, distributeAll: true })
+    expect(hands, '3 hands').to.have.lengthOf(3) &&
+      expect(hands, '52 cards total').satisfies((hands) => {
+        let count = 0
+        hands.forEach((hand) => {
+          count += hand.length
+        })
+        return count === 52
+      })
+  })
+  it('deal: 2 players, dist all', () => {
+    const hands = deal({ playerCount: 2, distributeAll: true })
+    expect(hands, '2 hands').to.have.lengthOf(2) &&
+      expect(hands, '52 cards total').satisfies((hands) => {
+        let count = 0
+        hands.forEach((hand) => {
+          count += hand.length
+        })
+        return count === 52
+      })
   })
 })

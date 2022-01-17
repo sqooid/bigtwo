@@ -16,12 +16,22 @@ export interface DealOptions {
 
 export function deal(options: DealOptions): Card[][] {
   const deck = shuffle(createDeck())
-  const hands = splitDeck(deck, options.playerCount)
-  if (!options.distributeAll) {
-    hands.forEach((hand) => {
-      hand.splice(HAND_COUNT)
-    })
+  let hands
+  while (true) {
+    // Keep reshuffling until valid hands are made
+    hands = splitDeck(deck, options.playerCount)
+    if (!options.distributeAll) {
+      hands.forEach((hand) => {
+        hand.splice(HAND_COUNT)
+      })
+    }
+    for (const hand of hands) {
+      if (options.fourTwos && hasFourTwos(hand)) continue
+      if (options.noFaces && hasNoFaces(hand)) continue
+    }
+    break
   }
+  return hands
 }
 
 function hasNoFaces(hand: Card[]): boolean {
