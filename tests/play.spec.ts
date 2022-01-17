@@ -49,6 +49,16 @@ describe('play.ts', () => {
     ]
     expect(isStraight(cards)).true
   })
+  it('isStraight true positive with 2', () => {
+    const cards = [
+      newCard(Suit.HEART, 2),
+      newCard(Suit.SPADE, 11),
+      newCard(Suit.CLUB, 1),
+      newCard(Suit.CLUB, 12),
+      newCard(Suit.HEART, 13),
+    ]
+    expect(isStraight(cards)).true
+  })
   it('isStraight true negative', () => {
     const cards = [
       newCard(Suit.HEART, 5),

@@ -32,12 +32,11 @@ export function isStraight(cards: Card[]): boolean {
     if (cardGreater(a, b)) return 1
     return -1
   })
-  console.log(cards)
   let currVal = cards[0].value
   if (currVal > 11) return false // Jack is max start for straight
   for (let i = 1; i < 5; ++i) {
     const nextVal = nextValue(currVal)
-    if (cards[1].value !== nextVal) return false
+    if (cards[i].value !== nextVal) return false
     currVal = nextVal
   }
   return true
