@@ -6,6 +6,8 @@ const HAND_COUNT = 13
 export interface DealOptions {
   // Number of players
   playerCount: number
+  // First player isn't guaranteed to hold diamond 3
+  randomHands?: boolean
   // Reshuffle if any player holds all two's
   fourTwos?: boolean
   // Reshuffle if any player has no face cards
@@ -15,7 +17,7 @@ export interface DealOptions {
 }
 
 /**
- * Deals with first player always having diamond 3
+ * Deals full deck
  * @param options
  * @returns
  */
@@ -36,6 +38,9 @@ export function deal(options: DealOptions): Card[][] {
       if (options.noFaces && hasNoFaces(hand)) continue
     }
     break
+  }
+  if (options.randomHands) {
+    return shuffle(hands)
   }
   return hands
 }
