@@ -59,6 +59,7 @@ export function findPlay(cards: Card[]): Play | undefined {
   }
 
   let combo: ComboResult
+  sortCards(cards)
   // Standard plays
   if (cards.length === 1) {
     return {
@@ -131,18 +132,26 @@ export function findPlay(cards: Card[]): Play | undefined {
   return undefined
 }
 
+/**
+ *
+ * @param cards Sorted array of cards
+ * @returns
+ */
 export function isPair(cards: Card[]): ComboResult {
   if (cards.length !== 2) return { found: false }
-  sortCards(cards)
   if (cards[0].value === cards[1].value) {
     return { found: true, value: cards[1] }
   }
   return { found: false }
 }
 
+/**
+ *
+ * @param cards Sorted array of cards
+ * @returns
+ */
 export function isTriple(cards: Card[]): ComboResult {
   if (cards.length !== 3) return { found: false }
-  sortCards(cards)
   if (cards[0].value === cards[1].value && cards[1].value === cards[2].value) {
     return {
       found: true,
@@ -154,9 +163,13 @@ export function isTriple(cards: Card[]): ComboResult {
   }
 }
 
+/**
+ *
+ * @param cards Sorted array of cards
+ * @returns
+ */
 export function isQuad(cards: Card[]): ComboResult {
   if (cards.length !== 4) return { found: false }
-  sortCards(cards)
   if (
     cards[0].value === cards[1].value &&
     cards[1].value === cards[2].value &&
@@ -172,9 +185,13 @@ export function isQuad(cards: Card[]): ComboResult {
   }
 }
 
+/**
+ *
+ * @param cards Sorted array of cards
+ * @returns
+ */
 export function isStraight(cards: Card[]): ComboResult {
   if (cards.length !== 5) return { found: false }
-  sortCards(cards)
   let currVal = cards[0].value
   if (currVal > 11) return { found: false } // Jack is max start for straight
   for (let i = 1; i < 5; ++i) {
@@ -185,9 +202,13 @@ export function isStraight(cards: Card[]): ComboResult {
   return { found: true, value: cards[4] }
 }
 
+/**
+ *
+ * @param cards Sorted array of cards
+ * @returns
+ */
 export function isFlush(cards: Card[]): ComboResult {
   if (cards.length !== 5) return { found: false }
-  sortCards(cards)
   if (
     cards[0].suit === cards[1].suit &&
     cards[2].suit === cards[3].suit &&
@@ -202,9 +223,13 @@ export function isFlush(cards: Card[]): ComboResult {
   return { found: false }
 }
 
+/**
+ *
+ * @param cards Sorted array of cards
+ * @returns
+ */
 export function isFullHouse(cards: Card[]): ComboResult {
   if (cards.length !== 5) return { found: false }
-  sortCards(cards)
   let pair = isPair(cards.slice(0, 2))
   let triple = isTriple(cards.slice(2, 5))
   if (pair.found && triple.found) {
@@ -224,22 +249,13 @@ export function isFullHouse(cards: Card[]): ComboResult {
   return { found: false }
 }
 
-export function isStraightFlush(cards: Card[]): ComboResult {
-  if (cards.length !== 5) return { found: false }
-  const flush = isFlush(cards)
-  const straight = isStraight(cards)
-  if (flush.found && straight.found) {
-    return {
-      found: true,
-      value: straight.value,
-    }
-  }
-  return { found: false }
-}
-
+/**
+ *
+ * @param cards Sorted array of cards
+ * @returns
+ */
 export function isBomb(cards: Card[]): ComboResult {
   if (cards.length !== 5) return { found: false }
-  sortCards(cards)
   let quad = isQuad(cards.slice(0, 4))
   if (quad.found) {
     return {
@@ -252,6 +268,24 @@ export function isBomb(cards: Card[]): ComboResult {
     return {
       found: true,
       value: quad.value,
+    }
+  }
+  return { found: false }
+}
+
+/**
+ *
+ * @param cards Sorted array of cards
+ * @returns
+ */
+export function isStraightFlush(cards: Card[]): ComboResult {
+  if (cards.length !== 5) return { found: false }
+  const flush = isFlush(cards)
+  const straight = isStraight(cards)
+  if (flush.found && straight.found) {
+    return {
+      found: true,
+      value: straight.value,
     }
   }
   return { found: false }

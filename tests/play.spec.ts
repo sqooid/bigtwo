@@ -11,6 +11,7 @@ import {
   isStraightFlush,
   isTriple,
   playGreater,
+  validPlay,
 } from '@/interfaces/play'
 import { expect } from 'chai'
 
@@ -28,9 +29,9 @@ describe('play.ts', () => {
   })
   it('isTriple true positive', () => {
     const cards = [
+      newCard(Suit.CLUB, 3),
       newCard(Suit.HEART, 3),
       newCard(Suit.SPADE, 3),
-      newCard(Suit.CLUB, 3),
     ]
     const res = isTriple(cards)
     expect(res.found, 'found').true &&
@@ -46,10 +47,10 @@ describe('play.ts', () => {
   })
   it('isQuad positive', () => {
     const cards = [
+      newCard(Suit.DIAMOND, 4),
+      newCard(Suit.CLUB, 4),
       newCard(Suit.HEART, 4),
       newCard(Suit.SPADE, 4),
-      newCard(Suit.CLUB, 4),
-      newCard(Suit.DIAMOND, 4),
     ]
     const res = isQuad(cards)
     expect(res.found, 'found').true &&
@@ -58,9 +59,9 @@ describe('play.ts', () => {
   it('isQuad negative', () => {
     const cards = [
       newCard(Suit.HEART, 3),
-      newCard(Suit.SPADE, 4),
-      newCard(Suit.CLUB, 4),
       newCard(Suit.DIAMOND, 4),
+      newCard(Suit.CLUB, 4),
+      newCard(Suit.SPADE, 4),
     ]
     expect(isQuad(cards).found).false
   })
@@ -78,11 +79,11 @@ describe('play.ts', () => {
   })
   it('isStraight true positive', () => {
     const cards = [
-      newCard(Suit.HEART, 6),
       newCard(Suit.SPADE, 5),
-      newCard(Suit.CLUB, 9),
-      newCard(Suit.CLUB, 8),
+      newCard(Suit.HEART, 6),
       newCard(Suit.HEART, 7),
+      newCard(Suit.CLUB, 8),
+      newCard(Suit.CLUB, 9),
     ]
     const res = isStraight(cards)
     expect(res.found, 'found').true &&
@@ -90,11 +91,11 @@ describe('play.ts', () => {
   })
   it('isStraight true positive with 2', () => {
     const cards = [
-      newCard(Suit.HEART, 2),
       newCard(Suit.SPADE, 11),
-      newCard(Suit.CLUB, 1),
       newCard(Suit.CLUB, 12),
       newCard(Suit.HEART, 13),
+      newCard(Suit.CLUB, 1),
+      newCard(Suit.HEART, 2),
     ]
     const res = isStraight(cards)
     expect(res.found, 'found').true &&
@@ -114,9 +115,9 @@ describe('play.ts', () => {
     const cards = [
       newCard(Suit.HEART, 5),
       newCard(Suit.HEART, 7),
-      newCard(Suit.HEART, 1),
       newCard(Suit.HEART, 8),
       newCard(Suit.HEART, 9),
+      newCard(Suit.HEART, 1),
     ]
     const res = isFlush(cards)
     expect(res.found, 'found').true &&
@@ -134,11 +135,11 @@ describe('play.ts', () => {
   })
   it('isFullHouse positive triple first', () => {
     const cards = [
+      newCard(Suit.DIAMOND, 7),
+      newCard(Suit.CLUB, 7),
       newCard(Suit.SPADE, 7),
       newCard(Suit.HEART, 8),
-      newCard(Suit.CLUB, 7),
       newCard(Suit.SPADE, 8),
-      newCard(Suit.DIAMOND, 7),
     ]
     const res = isFullHouse(cards)
     expect(res.found, 'found').true &&
@@ -146,11 +147,11 @@ describe('play.ts', () => {
   })
   it('isFullHouse positive triple second', () => {
     const cards = [
-      newCard(Suit.SPADE, 7),
-      newCard(Suit.HEART, 8),
       newCard(Suit.CLUB, 7),
-      newCard(Suit.SPADE, 8),
+      newCard(Suit.SPADE, 7),
       newCard(Suit.DIAMOND, 8),
+      newCard(Suit.HEART, 8),
+      newCard(Suit.SPADE, 8),
     ]
     const res = isFullHouse(cards)
     expect(res.found, 'found').true &&
@@ -168,11 +169,11 @@ describe('play.ts', () => {
   })
   it('isBomb positive', () => {
     const cards = [
-      newCard(Suit.SPADE, 7),
-      newCard(Suit.HEART, 7),
-      newCard(Suit.HEART, 1),
-      newCard(Suit.CLUB, 7),
       newCard(Suit.DIAMOND, 7),
+      newCard(Suit.CLUB, 7),
+      newCard(Suit.HEART, 7),
+      newCard(Suit.SPADE, 7),
+      newCard(Suit.HEART, 1),
     ]
     const res = isBomb(cards)
     expect(res.found, 'found').true &&
@@ -191,10 +192,10 @@ describe('play.ts', () => {
   it('isStraightFlush positive', () => {
     const cards = [
       newCard(Suit.HEART, 3),
-      newCard(Suit.HEART, 7),
+      newCard(Suit.HEART, 4),
       newCard(Suit.HEART, 5),
       newCard(Suit.HEART, 6),
-      newCard(Suit.HEART, 4),
+      newCard(Suit.HEART, 7),
     ]
     const res = isStraightFlush(cards)
     expect(res.found, 'found').true &&
@@ -407,5 +408,74 @@ describe('play.ts', () => {
       cards: [],
     }
     expect(playGreater(play2, play1)).true
+  })
+  it('validPlay negative number difference', () => {
+    const prevPlay = {
+      combo: Hand.SINGLE,
+      comboValue: newCard(Suit.DIAMOND, 3),
+      cards: [newCard(Suit.DIAMOND, 3)],
+    }
+    const play = {
+      combo: Hand.STRAIGHT,
+      comboValue: newCard(Suit.HEART, 1),
+      cards: [
+        newCard(Suit.CLUB, 11),
+        newCard(Suit.HEART, 1),
+        newCard(Suit.SPADE, 13),
+        newCard(Suit.HEART, 10),
+        newCard(Suit.DIAMOND, 12),
+      ],
+    }
+    expect(validPlay(play, prevPlay)).to.be.false
+  })
+  it('validPlay negative value difference', () => {
+    const prevPlay = {
+      combo: Hand.STRAIGHT,
+      comboValue: newCard(Suit.CLUB, 1),
+      cards: [
+        newCard(Suit.CLUB, 11),
+        newCard(Suit.CLUB, 1),
+        newCard(Suit.SPADE, 13),
+        newCard(Suit.HEART, 10),
+        newCard(Suit.DIAMOND, 12),
+      ],
+    }
+    const play = {
+      combo: Hand.STRAIGHT,
+      comboValue: newCard(Suit.DIAMOND, 1),
+      cards: [
+        newCard(Suit.CLUB, 11),
+        newCard(Suit.DIAMOND, 1),
+        newCard(Suit.SPADE, 13),
+        newCard(Suit.HEART, 10),
+        newCard(Suit.DIAMOND, 12),
+      ],
+    }
+    expect(validPlay(play, prevPlay)).to.be.false
+  })
+  it('validPlay positive', () => {
+    const prevPlay = {
+      combo: Hand.STRAIGHT,
+      comboValue: newCard(Suit.CLUB, 1),
+      cards: [
+        newCard(Suit.CLUB, 11),
+        newCard(Suit.CLUB, 1),
+        newCard(Suit.SPADE, 13),
+        newCard(Suit.HEART, 10),
+        newCard(Suit.DIAMOND, 12),
+      ],
+    }
+    const play = {
+      combo: Hand.STRAIGHT,
+      comboValue: newCard(Suit.HEART, 1),
+      cards: [
+        newCard(Suit.CLUB, 11),
+        newCard(Suit.HEART, 1),
+        newCard(Suit.SPADE, 13),
+        newCard(Suit.HEART, 10),
+        newCard(Suit.DIAMOND, 12),
+      ],
+    }
+    expect(validPlay(play, prevPlay)).to.be.true
   })
 })
