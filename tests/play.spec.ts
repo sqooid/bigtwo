@@ -1,5 +1,6 @@
 import { newCard, nextValue, Suit } from '@/interfaces/deck'
 import {
+  clonePlay,
   findPlay,
   Hand,
   isBomb,
@@ -477,5 +478,20 @@ describe('play.ts', () => {
       ],
     }
     expect(validPlay(play, prevPlay)).to.be.true
+  })
+  it('clonePlay', () => {
+    let clone
+    let jsonClone
+    {
+      const card = newCard(Suit.DIAMOND, 3)
+      const play = {
+        combo: Hand.SINGLE,
+        comboValue: card,
+        cards: [card],
+      }
+      jsonClone = JSON.parse(JSON.stringify(play))
+      clone = clonePlay(play)
+    }
+    expect(clone).to.eql(jsonClone)
   })
 })

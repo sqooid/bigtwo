@@ -3,7 +3,7 @@ import { Card, cardsEqual, newCard, Suit } from '@/interfaces/deck'
 import { expect } from 'chai'
 import rewire from 'rewire'
 
-const dealRewire = rewire('@/deal.ts')
+const dealRewire = rewire('@/utils/deal.ts')
 const createDeck = dealRewire.__get__('createDeck')
 const hasCard = dealRewire.__get__('hasCard')
 const splitDeck = dealRewire.__get__('splitDeck')

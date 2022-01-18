@@ -2,7 +2,9 @@ import {
   cardGreater,
   cardsEqual,
   cardValueGreater,
+  containsCards,
   newCard,
+  removeCards,
   Suit,
 } from '@/interfaces/deck'
 import { expect } from 'chai'
@@ -57,5 +59,67 @@ describe('deck.ts', () => {
     const card1 = newCard(Suit.CLUB, 5)
     const card2 = newCard(Suit.CLUB, 6)
     expect(cardGreater(card1, card2)).false
+  })
+  it('containsCards positive', () => {
+    const cards = [
+      newCard(Suit.CLUB, 4),
+      newCard(Suit.HEART, 5),
+      newCard(Suit.CLUB, 2),
+      newCard(Suit.SPADE, 11),
+      newCard(Suit.DIAMOND, 13),
+    ]
+    const cardList = [
+      newCard(Suit.CLUB, 4),
+      newCard(Suit.DIAMOND, 13),
+      newCard(Suit.HEART, 5),
+      newCard(Suit.SPADE, 11),
+      newCard(Suit.CLUB, 2),
+      newCard(Suit.CLUB, 4),
+      newCard(Suit.HEART, 12),
+      newCard(Suit.DIAMOND, 1),
+    ]
+    expect(containsCards(cards, cardList)).to.be.true
+  })
+  it('containsCards negative', () => {
+    const cards = [
+      newCard(Suit.CLUB, 4),
+      newCard(Suit.HEART, 5),
+      newCard(Suit.CLUB, 2),
+      newCard(Suit.SPADE, 11),
+      newCard(Suit.DIAMOND, 13),
+    ]
+    const cardList = [
+      newCard(Suit.CLUB, 4),
+      newCard(Suit.HEART, 5),
+      newCard(Suit.SPADE, 11),
+      newCard(Suit.CLUB, 2),
+      newCard(Suit.CLUB, 4),
+      newCard(Suit.HEART, 12),
+      newCard(Suit.DIAMOND, 1),
+    ]
+    expect(containsCards(cards, cardList)).to.be.false
+  })
+  it('removeCards', () => {
+    const cards = [
+      newCard(Suit.CLUB, 4),
+      newCard(Suit.HEART, 5),
+      newCard(Suit.CLUB, 2),
+      newCard(Suit.SPADE, 11),
+      newCard(Suit.DIAMOND, 13),
+    ]
+    const cardList = [
+      newCard(Suit.CLUB, 4),
+      newCard(Suit.HEART, 5),
+      newCard(Suit.SPADE, 11),
+      newCard(Suit.CLUB, 2),
+      newCard(Suit.CLUB, 4),
+      newCard(Suit.HEART, 12),
+      newCard(Suit.DIAMOND, 1),
+    ]
+    expect(removeCards(cards, cardList)).to.eql([
+      newCard(Suit.CLUB, 4),
+      newCard(Suit.HEART, 12),
+      newCard(Suit.DIAMOND, 1),
+    ])
   })
 })

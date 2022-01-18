@@ -1,13 +1,31 @@
 import { Player } from '@/interfaces/player'
-import { Play, validPlay } from '@/interfaces/play'
+import { clonePlay, Play, validPlay } from '@/interfaces/play'
 import { deal, DealOptions } from '@/utils/deal'
 import { containsCards, removeCards } from '@/interfaces/deck'
 
 interface State {
+  winner?: number
   turn: number
   playerTurnIndex: number
   players: Player[]
   board: Play[]
+}
+
+/**
+ * Clones the state 'deeply enough', assuming cards aren't modified in place
+ * @param state
+ * @returns Cloned state
+ */
+function cloneState(state: State): State {
+  return {
+    winner: state.winner,
+    turn: state.turn,
+    playerTurnIndex: state.playerTurnIndex,
+    players: state.players.map((player) => {
+      return { cards: [...player.cards] }
+    }),
+    board: [...state.board],
+  }
 }
 
 export class Game {
@@ -46,6 +64,7 @@ export class Game {
 
   /**
    * Makes play and advances turn if play was valid, no change otherwise
+   * Sets winner if play results in player having no cards left
    * @param play Play to make, with sorted cards
    * @returns True if play was valid, false if invalid play
    */
@@ -57,14 +76,26 @@ export class Game {
 
     const board = this.state.board
     const prevPlay = board[board.length - 1]
+
     if (validPlay(play, prevPlay)) {
       removeCards(play.cards, player.cards)
+      play = clonePlay(play)
       board.push(play)
-      this.history.push()
+
+      this.history.push(cloneState(this.state))
+
+      if (player.cards.length === 0) {
+        this.state.winner = this.state.playerTurnIndex
+        return
+      }
+
       ++this.state.turn
-      this.state.playerTurnIndex
+      this.state.playerTurnIndex =
+        (this.state.playerTurnIndex + 1) % this.state.players.length
+
       return true
     }
+
     return false
   }
 }

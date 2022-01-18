@@ -70,6 +70,38 @@ export function sortCards(cards: Card[]): Card[] {
   return cards
 }
 
+/**
+ *
+ * @param cards Cards to search for
+ * @param cardList List that may contain all cards
+ * @returns True if cardList contains all cards in cards
+ */
+export function containsCards(cards: Card[], cardList: Card[]): boolean {
+  return cards.every((a) => {
+    return (
+      cardList.findIndex((b) => {
+        return cardsEqual(a, b)
+      }) !== -1
+    )
+  })
+}
+
+/**
+ * Removes all cards in a list from another list in place
+ * @param cards Cards to search for and remove
+ * @param cardList List that is modified
+ * @returns Also returns modified cardList
+ */
+export function removeCards(cards: Card[], cardList: Card[]): Card[] {
+  cards.forEach((card) => {
+    const index = cardList.findIndex((listCard) => {
+      return cardsEqual(card, listCard)
+    })
+    if (index !== -1) cardList.splice(index, 1)
+  })
+  return cardList
+}
+
 export function newCard(suit: Suit, value: number) {
   if (value < 1 || value > 13) throw new Error('invalid card creation')
   return { suit, value }
