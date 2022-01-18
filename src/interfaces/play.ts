@@ -13,69 +13,143 @@ export enum Hand {
 
 export interface Play {
   combo: Hand
+  comboValue: Card
   cards: Card[]
 }
 
-export function isPair(cards: Card[]): boolean {
-  if (cards.length !== 2) return false
-  return cards[0].value === cards[1].value
+interface ComboResult {
+  found: boolean
+  value?: Card
 }
 
-export function isTriple(cards: Card[]): boolean {
-  if (cards.length !== 3) return false
-  return cards[0].value === cards[1].value && cards[1].value === cards[2].value
+// export function findPlay(cards: Card[]): Play {
+//   if()
+// }
+
+export function isPair(cards: Card[]): ComboResult {
+  if (cards.length !== 2) return { found: false }
+  sortCards(cards)
+  if (cards[0].value === cards[1].value) {
+    return { found: true, value: cards[1] }
+  }
+  return { found: false }
 }
 
-export function isQuad(cards: Card[]): boolean {
-  if (cards.length !== 4) return false
-  return (
+export function isTriple(cards: Card[]): ComboResult {
+  if (cards.length !== 3) return { found: false }
+  sortCards(cards)
+  if (cards[0].value === cards[1].value && cards[1].value === cards[2].value) {
+    return {
+      found: true,
+      value: cards[2],
+    }
+  }
+  return {
+    found: false,
+  }
+}
+
+export function isQuad(cards: Card[]): ComboResult {
+  if (cards.length !== 4) return { found: false }
+  sortCards(cards)
+  if (
     cards[0].value === cards[1].value &&
     cards[1].value === cards[2].value &&
     cards[2].value === cards[3].value
-  )
+  ) {
+    return {
+      found: true,
+      value: cards[3],
+    }
+  }
+  return {
+    found: false,
+  }
 }
 
-export function isStraight(cards: Card[]): boolean {
-  if (cards.length !== 5) return false
+export function isStraight(cards: Card[]): ComboResult {
+  if (cards.length !== 5) return { found: false }
   sortCards(cards)
   let currVal = cards[0].value
-  if (currVal > 11) return false // Jack is max start for straight
+  if (currVal > 11) return { found: false } // Jack is max start for straight
   for (let i = 1; i < 5; ++i) {
     const nextVal = nextValue(currVal)
-    if (cards[i].value !== nextVal) return false
+    if (cards[i].value !== nextVal) return { found: false }
     currVal = nextVal
   }
-  return true
+  return { found: true, value: cards[4] }
 }
 
-export function isFlush(cards: Card[]): boolean {
-  if (cards.length !== 5) return false
-  return (
+export function isFlush(cards: Card[]): ComboResult {
+  if (cards.length !== 5) return { found: false }
+  sortCards(cards)
+  if (
     cards[0].suit === cards[1].suit &&
     cards[2].suit === cards[3].suit &&
     cards[4].suit === cards[0].suit &&
     cards[0].suit === cards[2].suit
-  )
+  ) {
+    return {
+      found: true,
+      value: cards[4],
+    }
+  }
+  return { found: false }
 }
 
-export function isFullHouse(cards: Card[]): boolean {
-  if (cards.length !== 5) return false
+export function isFullHouse(cards: Card[]): ComboResult {
+  if (cards.length !== 5) return { found: false }
   sortCards(cards)
-  return (
-    (isPair(cards.slice(0, 2)) && isTriple(cards.slice(2, 5))) ||
-    (isTriple(cards.slice(0, 3)) && isPair(cards.slice(3, 5)))
-  )
+  let pair = isPair(cards.slice(0, 2))
+  let triple = isTriple(cards.slice(2, 5))
+  if (pair.found && triple.found) {
+    return {
+      found: true,
+      value: triple.value,
+    }
+  }
+  pair = isPair(cards.slice(3, 5))
+  triple = isTriple(cards.slice(0, 3))
+  if (pair.found && triple.found) {
+    return {
+      found: true,
+      value: triple.value,
+    }
+  }
+  return { found: false }
 }
 
-export function isStraightFlush(cards: Card[]): boolean {
-  if (cards.length !== 5) return false
-  return isFlush(cards) && isStraight(cards)
+export function isStraightFlush(cards: Card[]): ComboResult {
+  if (cards.length !== 5) return { found: false }
+  const flush = isFlush(cards)
+  const straight = isStraight(cards)
+  if (flush.found && straight.found) {
+    return {
+      found: true,
+      value: straight.value,
+    }
+  }
+  return { found: false }
 }
 
-export function isBomb(cards: Card[]): boolean {
-  if (cards.length !== 5) return false
+export function isBomb(cards: Card[]): ComboResult {
+  if (cards.length !== 5) return { found: false }
   sortCards(cards)
-  return isQuad(cards.slice(0, 4)) || isQuad(cards.slice(1.5))
+  let quad = isQuad(cards.slice(0, 4))
+  if (quad.found) {
+    return {
+      found: true,
+      value: quad.value,
+    }
+  }
+  quad = isQuad(cards.slice(1, 5))
+  if (quad.found) {
+    return {
+      found: true,
+      value: quad.value,
+    }
+  }
+  return { found: false }
 }
 
 export function playGreater(play1: Play, play2: Play): boolean {

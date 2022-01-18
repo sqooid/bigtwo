@@ -12,13 +12,16 @@ import {
 import { expect } from 'chai'
 
 describe('play.ts', () => {
-  it('isPair true positive', () => {
+  it('isPair positive', () => {
     const cards = [newCard(Suit.HEART, 3), newCard(Suit.SPADE, 3)]
-    expect(isPair(cards)).true
+    const res = isPair(cards)
+    expect(res.found, 'found').true &&
+      expect(res.value, 'value').to.eql(newCard(Suit.SPADE, 3))
   })
   it('isPair true negative', () => {
     const cards = [newCard(Suit.HEART, 4), newCard(Suit.SPADE, 3)]
-    expect(isPair(cards)).false
+    const res = isPair(cards)
+    expect(res.found).false
   })
   it('isTriple true positive', () => {
     const cards = [
@@ -26,7 +29,9 @@ describe('play.ts', () => {
       newCard(Suit.SPADE, 3),
       newCard(Suit.CLUB, 3),
     ]
-    expect(isTriple(cards)).true
+    const res = isTriple(cards)
+    expect(res.found, 'found').true &&
+      expect(res.value, 'value').to.eql(newCard(Suit.SPADE, 3))
   })
   it('isTriple true negative', () => {
     const cards = [
@@ -34,7 +39,7 @@ describe('play.ts', () => {
       newCard(Suit.SPADE, 4),
       newCard(Suit.CLUB, 3),
     ]
-    expect(isTriple(cards)).false
+    expect(isTriple(cards).found).false
   })
   it('isQuad positive', () => {
     const cards = [
@@ -43,7 +48,9 @@ describe('play.ts', () => {
       newCard(Suit.CLUB, 4),
       newCard(Suit.DIAMOND, 4),
     ]
-    expect(isQuad(cards)).true
+    const res = isQuad(cards)
+    expect(res.found, 'found').true &&
+      expect(res.value, 'value').to.eql(newCard(Suit.SPADE, 4))
   })
   it('isQuad negative', () => {
     const cards = [
@@ -52,7 +59,7 @@ describe('play.ts', () => {
       newCard(Suit.CLUB, 4),
       newCard(Suit.DIAMOND, 4),
     ]
-    expect(isQuad(cards)).false
+    expect(isQuad(cards).found).false
   })
   it('nextValue from 2', () => {
     expect(nextValue(2)).to.be.undefined
@@ -74,7 +81,9 @@ describe('play.ts', () => {
       newCard(Suit.CLUB, 8),
       newCard(Suit.HEART, 7),
     ]
-    expect(isStraight(cards)).true
+    const res = isStraight(cards)
+    expect(res.found, 'found').true &&
+      expect(res.value, 'value').to.eql(newCard(Suit.CLUB, 9))
   })
   it('isStraight true positive with 2', () => {
     const cards = [
@@ -84,7 +93,9 @@ describe('play.ts', () => {
       newCard(Suit.CLUB, 12),
       newCard(Suit.HEART, 13),
     ]
-    expect(isStraight(cards)).true
+    const res = isStraight(cards)
+    expect(res.found, 'found').true &&
+      expect(res.value, 'value').to.eql(newCard(Suit.HEART, 2))
   })
   it('isStraight true negative', () => {
     const cards = [
@@ -94,57 +105,53 @@ describe('play.ts', () => {
       newCard(Suit.CLUB, 8),
       newCard(Suit.HEART, 9),
     ]
-    expect(isStraight(cards)).false
-  })
-  it('isStraight true negative', () => {
-    const cards = [
-      newCard(Suit.HEART, 5),
-      newCard(Suit.SPADE, 7),
-      newCard(Suit.CLUB, 7),
-      newCard(Suit.CLUB, 8),
-      newCard(Suit.HEART, 9),
-    ]
-    expect(isStraight(cards)).false
+    expect(isStraight(cards).found).false
   })
   it('isFlush positive', () => {
     const cards = [
       newCard(Suit.HEART, 5),
       newCard(Suit.HEART, 7),
-      newCard(Suit.HEART, 7),
+      newCard(Suit.HEART, 1),
       newCard(Suit.HEART, 8),
       newCard(Suit.HEART, 9),
     ]
-    expect(isFlush(cards)).true
+    const res = isFlush(cards)
+    expect(res.found, 'found').true &&
+      expect(res.value, 'value').to.eql(newCard(Suit.HEART, 1))
   })
   it('isFlush negative', () => {
     const cards = [
       newCard(Suit.SPADE, 5),
       newCard(Suit.HEART, 7),
-      newCard(Suit.HEART, 7),
+      newCard(Suit.HEART, 1),
       newCard(Suit.HEART, 8),
       newCard(Suit.HEART, 9),
     ]
-    expect(isFlush(cards)).false
+    expect(isFlush(cards).found).false
   })
   it('isFullHouse positive triple first', () => {
     const cards = [
       newCard(Suit.SPADE, 7),
       newCard(Suit.HEART, 8),
-      newCard(Suit.HEART, 7),
-      newCard(Suit.HEART, 8),
-      newCard(Suit.HEART, 7),
+      newCard(Suit.CLUB, 7),
+      newCard(Suit.SPADE, 8),
+      newCard(Suit.DIAMOND, 7),
     ]
-    expect(isFullHouse(cards)).true
+    const res = isFullHouse(cards)
+    expect(res.found, 'found').true &&
+      expect(res.value, 'value').to.eql(newCard(Suit.SPADE, 7))
   })
   it('isFullHouse positive triple second', () => {
     const cards = [
       newCard(Suit.SPADE, 7),
       newCard(Suit.HEART, 8),
-      newCard(Suit.HEART, 7),
-      newCard(Suit.HEART, 8),
-      newCard(Suit.HEART, 8),
+      newCard(Suit.CLUB, 7),
+      newCard(Suit.SPADE, 8),
+      newCard(Suit.DIAMOND, 8),
     ]
-    expect(isFullHouse(cards)).true
+    const res = isFullHouse(cards)
+    expect(res.found, 'found').true &&
+      expect(res.value, 'value').to.eql(newCard(Suit.SPADE, 8))
   })
   it('isFullHouse negative', () => {
     const cards = [
@@ -154,37 +161,41 @@ describe('play.ts', () => {
       newCard(Suit.HEART, 8),
       newCard(Suit.HEART, 8),
     ]
-    expect(isFullHouse(cards)).false
+    expect(isFullHouse(cards).found).false
   })
   it('isBomb positive', () => {
     const cards = [
       newCard(Suit.SPADE, 7),
       newCard(Suit.HEART, 7),
       newCard(Suit.HEART, 1),
-      newCard(Suit.HEART, 7),
-      newCard(Suit.HEART, 7),
+      newCard(Suit.CLUB, 7),
+      newCard(Suit.DIAMOND, 7),
     ]
-    expect(isBomb(cards)).true
+    const res = isBomb(cards)
+    expect(res.found, 'found').true &&
+      expect(res.value).to.eql(newCard(Suit.SPADE, 7))
   })
   it('isBomb negative', () => {
     const cards = [
       newCard(Suit.SPADE, 7),
       newCard(Suit.HEART, 2),
       newCard(Suit.HEART, 1),
-      newCard(Suit.HEART, 7),
-      newCard(Suit.HEART, 7),
+      newCard(Suit.CLUB, 7),
+      newCard(Suit.DIAMOND, 7),
     ]
-    expect(isBomb(cards)).false
+    expect(isBomb(cards).found).false
   })
   it('isStraightFlush positive', () => {
     const cards = [
       newCard(Suit.HEART, 3),
-      newCard(Suit.HEART, 4),
+      newCard(Suit.HEART, 7),
       newCard(Suit.HEART, 5),
       newCard(Suit.HEART, 6),
-      newCard(Suit.HEART, 7),
+      newCard(Suit.HEART, 4),
     ]
-    expect(isStraightFlush(cards)).true
+    const res = isStraightFlush(cards)
+    expect(res.found, 'found').true &&
+      expect(res.value).to.eql(newCard(Suit.HEART, 7))
   })
   it('isStraightFlush negative cross', () => {
     const cards = [
@@ -194,7 +205,7 @@ describe('play.ts', () => {
       newCard(Suit.HEART, 5),
       newCard(Suit.HEART, 6),
     ]
-    expect(isStraightFlush(cards)).false
+    expect(isStraightFlush(cards).found).false
   })
   it('isStraightFlush negative suit', () => {
     const cards = [
@@ -204,7 +215,7 @@ describe('play.ts', () => {
       newCard(Suit.HEART, 6),
       newCard(Suit.HEART, 7),
     ]
-    expect(isStraightFlush(cards)).false
+    expect(isStraightFlush(cards).found).false
   })
   it('isStraightFlush negative number', () => {
     const cards = [
@@ -214,6 +225,6 @@ describe('play.ts', () => {
       newCard(Suit.HEART, 6),
       newCard(Suit.HEART, 8),
     ]
-    expect(isStraightFlush(cards)).false
+    expect(isStraightFlush(cards).found).false
   })
 })
