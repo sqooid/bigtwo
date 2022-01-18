@@ -479,6 +479,20 @@ describe('play.ts', () => {
     }
     expect(validPlay(play, prevPlay)).to.be.true
   })
+  it('validPlay positive no previous', () => {
+    const play = {
+      combo: Hand.STRAIGHT,
+      comboValue: newCard(Suit.HEART, 1),
+      cards: [
+        newCard(Suit.CLUB, 11),
+        newCard(Suit.HEART, 1),
+        newCard(Suit.SPADE, 13),
+        newCard(Suit.HEART, 10),
+        newCard(Suit.DIAMOND, 12),
+      ],
+    }
+    expect(validPlay(play)).to.be.true
+  })
   it('clonePlay', () => {
     let clone
     let jsonClone

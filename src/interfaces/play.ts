@@ -30,7 +30,9 @@ export function clonePlay(play: Play): Play {
   }
 }
 
-export function validPlay(play: Play, prevPlay: Play): boolean {
+export function validPlay(play: Play, prevPlay?: Play): boolean {
+  if (!findPlay(play.cards)) return false
+  if (!prevPlay) return true
   if (play.cards.length !== prevPlay.cards.length) return false
   return playGreater(play, prevPlay)
 }

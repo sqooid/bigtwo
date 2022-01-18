@@ -4,9 +4,9 @@ import { deal, DealOptions } from '@/utils/deal'
 import { containsCards, removeCards } from '@/interfaces/deck'
 
 interface State {
-  winner?: number
+  winnerIndex?: number
   turn: number
-  playerTurnIndex: number
+  turnIndex: number
   players: Player[]
   board: Play[]
 }
@@ -18,9 +18,9 @@ interface State {
  */
 function cloneState(state: State): State {
   return {
-    winner: state.winner,
+    winnerIndex: state.winnerIndex,
     turn: state.turn,
-    playerTurnIndex: state.playerTurnIndex,
+    turnIndex: state.turnIndex,
     players: state.players.map((player) => {
       return { cards: [...player.cards] }
     }),
@@ -32,11 +32,11 @@ export class Game {
   /**
    * Current state of the game
    */
-  state: State
+  _state: State
   /**
    * Past states
    */
-  history: State[]
+  _history: State[]
 
   constructor() {
     this.clear()
@@ -46,8 +46,8 @@ export class Game {
    * Clears all existing state
    */
   clear() {
-    this.state = { turn: 1, playerTurnIndex: 0, players: [], board: [] }
-    this.history = []
+    this._state = { turn: 0, turnIndex: 0, players: [], board: [] }
+    this._history = []
   }
 
   /**
@@ -58,40 +58,43 @@ export class Game {
     this.clear()
     const hands = deal(options)
     for (const hand of hands) {
-      this.state.players.push({ cards: hand })
+      this._state.players.push({ cards: hand })
     }
   }
 
   /**
    * Makes play and advances turn if play was valid, no change otherwise
    * Sets winner if play results in player having no cards left
-   * @param play Play to make, with sorted cards
+   * @param play Play to make, with sorted cards. Pass if undefined
    * @returns True if play was valid, false if invalid play
    */
-  makePlay(play: Play): boolean {
-    const player = this.state.players[this.state.playerTurnIndex]
+  makePlay(play?: Play): boolean {
+    const player = this._state.players[this._state.turnIndex]
     if (!containsCards(play.cards, player.cards)) {
       return false
     }
 
-    const board = this.state.board
+    const board = this._state.board
     const prevPlay = board[board.length - 1]
 
     if (validPlay(play, prevPlay)) {
+      this._history.push(cloneState(this._state))
+
       removeCards(play.cards, player.cards)
-      play = clonePlay(play)
-      board.push(play)
+      const playClone = clonePlay(play)
+      board.push(playClone)
 
-      this.history.push(cloneState(this.state))
+      ++this._state.turn
+      this._state.turnIndex =
+        (this._state.turnIndex + 1) % this._state.players.length
 
+      // Winning play
       if (player.cards.length === 0) {
-        this.state.winner = this.state.playerTurnIndex
-        return
+        this._state.winnerIndex =
+          (this._state.turnIndex - 1) % this._state.players.length
+        // Chuck winning play onto history as well for completeness
+        this._history.push(cloneState(this._state))
       }
-
-      ++this.state.turn
-      this.state.playerTurnIndex =
-        (this.state.playerTurnIndex + 1) % this.state.players.length
 
       return true
     }
