@@ -1,6 +1,6 @@
 import { Player } from '@/interfaces/player'
 import { Play } from '@/interfaces/play'
-import { deal, DealOptions } from '@/deal'
+import { deal, DealOptions } from '@/utils/deal'
 
 interface State {
   turn: number

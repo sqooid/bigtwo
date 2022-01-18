@@ -1,4 +1,4 @@
-import { deal } from '@/deal'
+import { deal } from '@/utils/deal'
 import { Card, cardsEqual, newCard, Suit } from '@/interfaces/deck'
 import { expect } from 'chai'
 import rewire from 'rewire'
