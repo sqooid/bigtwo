@@ -22,6 +22,25 @@ interface ComboResult {
   value?: Card
 }
 
+export function validPlay(play: Play, prevPlay: Play): boolean {
+  if (play.cards.length !== prevPlay.cards.length) return false
+  return playGreater(play, prevPlay)
+}
+
+/**
+ * Compares two plays. Doesn't check number of cards
+ * @param play1
+ * @param play2
+ * @returns True if play1 beats play2, false otherwise
+ */
+export function playGreater(play1: Play, play2: Play): boolean {
+  if (play1.combo > play2.combo) return true
+  if (play1.combo < play2.combo) return false
+  // Same combo
+  if (cardGreater(play1.comboValue, play2.comboValue)) return true
+  return false
+}
+
 /**
  * Will be exposed in API
  * @param cards
@@ -236,8 +255,4 @@ export function isBomb(cards: Card[]): ComboResult {
     }
   }
   return { found: false }
-}
-
-export function playGreater(play1: Play, play2: Play): boolean {
-  return true
 }

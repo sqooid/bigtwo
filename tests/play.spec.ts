@@ -10,6 +10,7 @@ import {
   isStraight,
   isStraightFlush,
   isTriple,
+  playGreater,
 } from '@/interfaces/play'
 import { expect } from 'chai'
 
@@ -380,5 +381,31 @@ describe('play.ts', () => {
   it('findPlay invalid card suit', () => {
     const cards = [{ suit: Suit.CLUB + 10, value: 3 }]
     expect(findPlay(cards)).to.be.undefined
+  })
+  it('playGreater positive combo', () => {
+    const play1 = {
+      combo: Hand.FLUSH,
+      comboValue: newCard(Suit.DIAMOND, 6),
+      cards: [],
+    }
+    const play2 = {
+      combo: Hand.FULLHOUSE,
+      comboValue: newCard(Suit.CLUB, 7),
+      cards: [],
+    }
+    expect(playGreater(play2, play1)).true
+  })
+  it('playGreater positive value', () => {
+    const play1 = {
+      combo: Hand.STRAIGHT,
+      comboValue: newCard(Suit.DIAMOND, 9),
+      cards: [],
+    }
+    const play2 = {
+      combo: Hand.STRAIGHT,
+      comboValue: newCard(Suit.CLUB, 9),
+      cards: [],
+    }
+    expect(playGreater(play2, play1)).true
   })
 })
