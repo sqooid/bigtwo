@@ -1,5 +1,7 @@
 import { newCard, nextValue, Suit } from '@/interfaces/deck'
 import {
+  findPlay,
+  Hand,
   isBomb,
   isFlush,
   isFullHouse,
@@ -226,5 +228,157 @@ describe('play.ts', () => {
       newCard(Suit.HEART, 8),
     ]
     expect(isStraightFlush(cards).found).false
+  })
+  it('findPlay single', () => {
+    const cards = [newCard(Suit.CLUB, 5)]
+    expect(findPlay(cards)).to.eql({
+      combo: Hand.SINGLE,
+      comboValue: newCard(Suit.CLUB, 5),
+      cards,
+    })
+  })
+  it('findPlay pair', () => {
+    const cards = [newCard(Suit.CLUB, 5), newCard(Suit.HEART, 5)]
+    expect(findPlay(cards)).to.eql({
+      combo: Hand.PAIR,
+      comboValue: newCard(Suit.HEART, 5),
+      cards,
+    })
+  })
+  it('findPlay triple', () => {
+    const cards = [
+      newCard(Suit.CLUB, 5),
+      newCard(Suit.HEART, 5),
+      newCard(Suit.SPADE, 5),
+    ]
+    expect(findPlay(cards)).to.eql({
+      combo: Hand.TRIPLE,
+      comboValue: newCard(Suit.SPADE, 5),
+      cards,
+    })
+  })
+  it('findPlay straight', () => {
+    const cards = [
+      newCard(Suit.CLUB, 11),
+      newCard(Suit.HEART, 1),
+      newCard(Suit.SPADE, 13),
+      newCard(Suit.HEART, 10),
+      newCard(Suit.DIAMOND, 12),
+    ]
+    expect(findPlay(cards)).to.eql({
+      combo: Hand.STRAIGHT,
+      comboValue: newCard(Suit.HEART, 1),
+      cards,
+    })
+  })
+  it('findPlay flush', () => {
+    const cards = [
+      newCard(Suit.HEART, 11),
+      newCard(Suit.HEART, 1),
+      newCard(Suit.HEART, 13),
+      newCard(Suit.HEART, 10),
+      newCard(Suit.HEART, 8),
+    ]
+    expect(findPlay(cards)).to.eql({
+      combo: Hand.FLUSH,
+      comboValue: newCard(Suit.HEART, 1),
+      cards,
+    })
+  })
+  it('findPlay full house', () => {
+    const cards = [
+      newCard(Suit.CLUB, 11),
+      newCard(Suit.HEART, 11),
+      newCard(Suit.SPADE, 11),
+      newCard(Suit.HEART, 10),
+      newCard(Suit.DIAMOND, 10),
+    ]
+    expect(findPlay(cards)).to.eql({
+      combo: Hand.FULLHOUSE,
+      comboValue: newCard(Suit.SPADE, 11),
+      cards,
+    })
+  })
+  it('findPlay bomb', () => {
+    const cards = [
+      newCard(Suit.CLUB, 11),
+      newCard(Suit.HEART, 11),
+      newCard(Suit.SPADE, 11),
+      newCard(Suit.DIAMOND, 11),
+      newCard(Suit.DIAMOND, 10),
+    ]
+    expect(findPlay(cards)).to.eql({
+      combo: Hand.BOMB,
+      comboValue: newCard(Suit.SPADE, 11),
+      cards,
+    })
+  })
+  it('findPlay straight flush', () => {
+    const cards = [
+      newCard(Suit.SPADE, 1),
+      newCard(Suit.SPADE, 11),
+      newCard(Suit.SPADE, 13),
+      newCard(Suit.SPADE, 12),
+      newCard(Suit.SPADE, 2),
+    ]
+    expect(findPlay(cards)).to.eql({
+      combo: Hand.STRAIGHTFLUSH,
+      comboValue: newCard(Suit.SPADE, 2),
+      cards,
+    })
+  })
+  it('findPlay 5 card invalid', () => {
+    const cards = [
+      newCard(Suit.SPADE, 1),
+      newCard(Suit.SPADE, 11),
+      newCard(Suit.SPADE, 13),
+      newCard(Suit.SPADE, 12),
+      newCard(Suit.HEART, 1),
+    ]
+    expect(findPlay(cards)).to.be.undefined
+  })
+  it('findPlay 4 card invalid', () => {
+    const cards = [
+      newCard(Suit.SPADE, 1),
+      newCard(Suit.SPADE, 11),
+      newCard(Suit.SPADE, 13),
+      newCard(Suit.SPADE, 12),
+    ]
+    expect(findPlay(cards)).to.be.undefined
+  })
+  it('findPlay 3 card invalid', () => {
+    const cards = [
+      newCard(Suit.SPADE, 1),
+      newCard(Suit.SPADE, 11),
+      newCard(Suit.SPADE, 12),
+    ]
+    expect(findPlay(cards)).to.be.undefined
+  })
+  it('findPlay 2 card invalid', () => {
+    const cards = [newCard(Suit.SPADE, 1), newCard(Suit.SPADE, 12)]
+    expect(findPlay(cards)).to.be.undefined
+  })
+  it('findPlay 0 card invalid', () => {
+    const cards = []
+    expect(findPlay(cards)).to.be.undefined
+  })
+  it('findPlay 6 card invalid', () => {
+    const cards = [
+      newCard(Suit.SPADE, 1),
+      newCard(Suit.SPADE, 11),
+      newCard(Suit.SPADE, 13),
+      newCard(Suit.SPADE, 12),
+      newCard(Suit.HEART, 1),
+      newCard(Suit.DIAMOND, 1),
+    ]
+    expect(findPlay(cards)).to.be.undefined
+  })
+  it('findPlay invalid card value', () => {
+    const cards = [{ suit: Suit.CLUB, value: 0 }]
+    expect(findPlay(cards)).to.be.undefined
+  })
+  it('findPlay invalid card suit', () => {
+    const cards = [{ suit: Suit.CLUB + 10, value: 3 }]
+    expect(findPlay(cards)).to.be.undefined
   })
 })

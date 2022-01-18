@@ -22,9 +22,95 @@ interface ComboResult {
   value?: Card
 }
 
-// export function findPlay(cards: Card[]): Play {
-//   if()
-// }
+/**
+ * Will be exposed in API
+ * @param cards
+ * @returns Undefined if invalid play
+ */
+export function findPlay(cards: Card[]): Play | undefined {
+  // Guaranteed invalid plays
+  if (
+    cards.length < 1 ||
+    cards.length > 5 ||
+    cards.some((card) => {
+      return card.suit < 0 || card.suit > 3 || card.value < 1 || card.value > 13
+    })
+  ) {
+    return undefined
+  }
+
+  let combo: ComboResult
+  // Standard plays
+  if (cards.length === 1) {
+    return {
+      combo: Hand.SINGLE,
+      comboValue: cards[0],
+      cards,
+    }
+  }
+  combo = isTriple(cards)
+  if (combo.found) {
+    return {
+      combo: Hand.TRIPLE,
+      comboValue: combo.value,
+      cards,
+    }
+  }
+  combo = isPair(cards)
+  if (combo.found) {
+    return {
+      combo: Hand.PAIR,
+      comboValue: combo.value,
+      cards,
+    }
+  }
+
+  // Actual combos
+  if (cards.length === 5) {
+    combo = isStraightFlush(cards)
+    if (combo.found) {
+      return {
+        combo: Hand.STRAIGHTFLUSH,
+        comboValue: combo.value,
+        cards,
+      }
+    }
+    combo = isBomb(cards)
+    if (combo.found) {
+      return {
+        combo: Hand.BOMB,
+        comboValue: combo.value,
+        cards,
+      }
+    }
+    combo = isFullHouse(cards)
+    if (combo.found) {
+      return {
+        combo: Hand.FULLHOUSE,
+        comboValue: combo.value,
+        cards,
+      }
+    }
+    combo = isFlush(cards)
+    if (combo.found) {
+      return {
+        combo: Hand.FLUSH,
+        comboValue: combo.value,
+        cards,
+      }
+    }
+    combo = isStraight(cards)
+    if (combo.found) {
+      return {
+        combo: Hand.STRAIGHT,
+        comboValue: combo.value,
+        cards,
+      }
+    }
+  }
+  // Otherwise invalid combo
+  return undefined
+}
 
 export function isPair(cards: Card[]): ComboResult {
   if (cards.length !== 2) return { found: false }
