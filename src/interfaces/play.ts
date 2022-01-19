@@ -13,8 +13,17 @@ export enum Hand {
 }
 
 export interface Play {
+  /**
+   * The type of the combo
+   */
   combo: Hand
+  /**
+   * The card used to determine the value of the combo
+   */
   comboValue: Card
+  /**
+   * The cards making up the play
+   */
   cards: Card[]
 }
 

@@ -4,14 +4,32 @@ import { deal, DealOptions } from '@/utils/deal'
 import { containsCards, removeCards } from '@/interfaces/deck'
 
 export interface BoardPlay {
+  /**
+   * Index of the player that made this play
+   */
   playerIndex: number
+  /**
+   * The play that was made
+   */
   play: Play
 }
 
 export interface State {
+  /**
+   * Round number
+   */
   turn: number
+  /**
+   * Index of the player to make the next play
+   */
   turnIndex: number
+  /**
+   * List of the players
+   */
   players: Player[]
+  /**
+   * List of all plays that have been made
+   */
   board: BoardPlay[]
 }
 
@@ -87,6 +105,15 @@ export class Game {
     }
 
     return false
+  }
+
+  /**
+   * If index is out of bounds, undefined is returned
+   * @param index Player index
+   * @returns Player with that index
+   */
+  getPlayer(index: number): Player | undefined {
+    return this._state.players[index]
   }
 
   getWinner(): number | undefined {

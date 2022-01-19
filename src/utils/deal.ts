@@ -4,15 +4,25 @@ const DECK_COUNT = 52
 const HAND_COUNT = 13
 
 export interface DealOptions {
-  // Number of players
+  /**
+   * Number of players
+   */
   playerCount: number
-  // First player isn't guaranteed to hold diamond 3
+  /**
+   * First player isn't guaranteed to hold diamond 3
+   */
   randomHands?: boolean
-  // Reshuffle if any player holds all two's
+  /**
+   * Reshuffle if any player holds all two's
+   */
   fourTwos?: boolean
-  // Reshuffle if any player has no face cards
+  /**
+   * Reshuffle if any player has no face cards
+   */
   noFaces?: boolean
-  // Distribute all cards if less than four players
+  /**
+   * Distribute all cards if less than four players
+   */
   distributeAll?: boolean
 }
 
