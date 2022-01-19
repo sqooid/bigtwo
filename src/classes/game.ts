@@ -15,24 +15,6 @@ export interface State {
   board: BoardPlay[]
 }
 
-// /**
-//  * Clones the state 'deeply enough', assuming cards aren't modified in place
-//  * @param state
-//  * @returns Cloned state
-//  */
-// function cloneState(state: State): State {
-//   return {
-//     winnerIndex: state.winnerIndex,
-//     turn: state.turn,
-//     turnIndex: state.turnIndex,
-//     lastPlayIndex: state.lastPlayIndex,
-//     players: state.players.map((player) => {
-//       return { cards: [...player.cards] }
-//     }),
-//     board: [...state.board],
-//   }
-// }
-
 export class Game {
   _finished: boolean
   _state: State
@@ -45,6 +27,7 @@ export class Game {
    * Clears all existing state
    */
   clear() {
+    this._finished = false
     this._state = {
       turn: 0,
       turnIndex: 0,
