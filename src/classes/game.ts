@@ -3,42 +3,39 @@ import { clonePlay, Play, validPlay } from '@/interfaces/play'
 import { deal, DealOptions } from '@/utils/deal'
 import { containsCards, removeCards } from '@/interfaces/deck'
 
+interface BoardPlay {
+  playerIndex: number
+  play: Play
+}
+
 export interface State {
-  winnerIndex?: number
   turn: number
   turnIndex: number
-  lastPlayIndex: number
   players: Player[]
-  board: Play[]
+  board: BoardPlay[]
 }
 
-/**
- * Clones the state 'deeply enough', assuming cards aren't modified in place
- * @param state
- * @returns Cloned state
- */
-function cloneState(state: State): State {
-  return {
-    winnerIndex: state.winnerIndex,
-    turn: state.turn,
-    turnIndex: state.turnIndex,
-    lastPlayIndex: state.lastPlayIndex,
-    players: state.players.map((player) => {
-      return { cards: [...player.cards] }
-    }),
-    board: [...state.board],
-  }
-}
+// /**
+//  * Clones the state 'deeply enough', assuming cards aren't modified in place
+//  * @param state
+//  * @returns Cloned state
+//  */
+// function cloneState(state: State): State {
+//   return {
+//     winnerIndex: state.winnerIndex,
+//     turn: state.turn,
+//     turnIndex: state.turnIndex,
+//     lastPlayIndex: state.lastPlayIndex,
+//     players: state.players.map((player) => {
+//       return { cards: [...player.cards] }
+//     }),
+//     board: [...state.board],
+//   }
+// }
 
 export class Game {
-  /**
-   * Current state of the game
-   */
+  _finished: boolean
   _state: State
-  /**
-   * Past states
-   */
-  _history: State[]
 
   constructor() {
     this.clear()
@@ -51,11 +48,9 @@ export class Game {
     this._state = {
       turn: 0,
       turnIndex: 0,
-      lastPlayIndex: 0,
       players: [],
       board: [],
     }
-    this._history = []
   }
 
   /**
@@ -77,7 +72,14 @@ export class Game {
    * @returns True if play was valid, false if invalid play
    */
   makePlay(play?: Play): boolean {
-    const player = this._state.players[this._state.turnIndex]
+    if (this._finished) return false
+    if (!play) {
+      this._tickBoard()
+      return true
+    }
+
+    const turnIndex = this._state.turnIndex
+    const player = this._state.players[turnIndex]
     if (!containsCards(play.cards, player.cards)) {
       return false
     }
@@ -85,29 +87,29 @@ export class Game {
     const board = this._state.board
     const prevPlay = board[board.length - 1]
 
-    if (validPlay(play, prevPlay)) {
-      this._history.push(cloneState(this._state))
-
+    if (validPlay(play, prevPlay?.play) || prevPlay.playerIndex === turnIndex) {
+      // Tick state
       removeCards(play.cards, player.cards)
       const playClone = clonePlay(play)
-      board.push(playClone)
+      board.push({ play: playClone, playerIndex: turnIndex })
 
-      ++this._state.turn
-      this._state.turnIndex =
-        (this._state.turnIndex + 1) % this._state.players.length
+      this._tickBoard()
 
       // Winning play
       if (player.cards.length === 0) {
-        this._state.winnerIndex =
-          (this._state.turnIndex - 1) % this._state.players.length
-        // Chuck winning play onto history as well for completeness
-        this._history.push(cloneState(this._state))
+        this._finished = true
       }
 
       return true
     }
 
     return false
+  }
+
+  _tickBoard() {
+    ++this._state.turn
+    this._state.turnIndex =
+      (this._state.turnIndex + 1) % this._state.players.length
   }
 }
 

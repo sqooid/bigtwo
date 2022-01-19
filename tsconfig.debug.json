@@ -3,12 +3,13 @@
 		"module": "commonjs",
 		"target": "es2015",
 		"declaration": true,
-		"outDir": "dist",
+		"outDir": "debug",
 		"baseUrl": ".",
 		"paths": {
 			"@/*":["src/*"],
 		},
 		"esModuleInterop": true,
+		"inlineSourceMap": true
 	},
 	"include": [
 		"src/**/*",
