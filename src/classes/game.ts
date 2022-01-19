@@ -74,7 +74,7 @@ export class Game {
   makePlay(play?: Play): boolean {
     if (this._finished) return false
     if (!play) {
-      this._tickBoard()
+      _tickBoard(this._state)
       return true
     }
 
@@ -85,7 +85,7 @@ export class Game {
     }
 
     const board = this._state.board
-    const prevPlay = board[board.length - 1]
+    const prevPlay: BoardPlay | undefined = board[board.length - 1]
 
     if (validPlay(play, prevPlay?.play) || prevPlay.playerIndex === turnIndex) {
       // Tick state
@@ -93,7 +93,7 @@ export class Game {
       const playClone = clonePlay(play)
       board.push({ play: playClone, playerIndex: turnIndex })
 
-      this._tickBoard()
+      _tickBoard(this._state)
 
       // Winning play
       if (player.cards.length === 0) {
@@ -106,11 +106,16 @@ export class Game {
     return false
   }
 
-  _tickBoard() {
-    ++this._state.turn
-    this._state.turnIndex =
-      (this._state.turnIndex + 1) % this._state.players.length
+  getWinner(): number | undefined {
+    if (!this._finished) return undefined
+    const board = this._state.board
+    return board[board.length - 1].playerIndex
   }
+}
+
+function _tickBoard(state: State) {
+  ++state.turn
+  state.turnIndex = (state.turnIndex + 1) % state.players.length
 }
 
 export function createGame(): Game {

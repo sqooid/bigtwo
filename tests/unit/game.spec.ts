@@ -6,6 +6,7 @@ import { utils } from 'mocha'
 import rewire from 'rewire'
 
 const gameRewire = rewire('@/classes/game.ts')
+const _tickBoard = gameRewire.__get__('_tickBoard')
 
 describe('game.ts', () => {
   it('Game dealCards 4 players', () => {
@@ -21,6 +22,16 @@ describe('game.ts', () => {
       playerCount: 3,
     })
     expect(game._state.players).to.have.lengthOf(3)
+  })
+  it('tickBoard correct loop', () => {
+    const state: State = {
+      turn: 3,
+      turnIndex: 3,
+      board: [],
+      players: [{ cards: [] }, { cards: [] }, { cards: [] }, { cards: [] }],
+    }
+    _tickBoard(state)
+    expect(state.turn).to.equal(4) && expect(state.turnIndex).to.equal(0)
   })
   it('makePlay invalid combo', () => {
     const game = createGame()
