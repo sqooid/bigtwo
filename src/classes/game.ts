@@ -3,10 +3,11 @@ import { clonePlay, Play, validPlay } from '@/interfaces/play'
 import { deal, DealOptions } from '@/utils/deal'
 import { containsCards, removeCards } from '@/interfaces/deck'
 
-interface State {
+export interface State {
   winnerIndex?: number
   turn: number
   turnIndex: number
+  lastPlayIndex: number
   players: Player[]
   board: Play[]
 }
@@ -21,6 +22,7 @@ function cloneState(state: State): State {
     winnerIndex: state.winnerIndex,
     turn: state.turn,
     turnIndex: state.turnIndex,
+    lastPlayIndex: state.lastPlayIndex,
     players: state.players.map((player) => {
       return { cards: [...player.cards] }
     }),
@@ -46,7 +48,13 @@ export class Game {
    * Clears all existing state
    */
   clear() {
-    this._state = { turn: 0, turnIndex: 0, players: [], board: [] }
+    this._state = {
+      turn: 0,
+      turnIndex: 0,
+      lastPlayIndex: 0,
+      players: [],
+      board: [],
+    }
     this._history = []
   }
 
