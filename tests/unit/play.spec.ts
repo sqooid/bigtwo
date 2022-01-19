@@ -410,7 +410,7 @@ describe('play.ts', () => {
     }
     expect(playGreater(play2, play1)).true
   })
-  it('validPlay negative number difference', () => {
+  it('validPlay negative card count difference', () => {
     const prevPlay = {
       combo: Hand.SINGLE,
       comboValue: newCard(Suit.DIAMOND, 3),
@@ -431,7 +431,28 @@ describe('play.ts', () => {
       validPlay({ play, playerIndex: 1 }, { play: prevPlay, playerIndex: 0 }),
     ).to.be.false
   })
-  it('validPlay negative value difference', () => {
+  it('validPlay positive card count difference but same player', () => {
+    const prevPlay = {
+      combo: Hand.SINGLE,
+      comboValue: newCard(Suit.DIAMOND, 3),
+      cards: [newCard(Suit.DIAMOND, 3)],
+    }
+    const play = {
+      combo: Hand.STRAIGHT,
+      comboValue: newCard(Suit.HEART, 1),
+      cards: [
+        newCard(Suit.CLUB, 11),
+        newCard(Suit.HEART, 1),
+        newCard(Suit.SPADE, 13),
+        newCard(Suit.HEART, 10),
+        newCard(Suit.DIAMOND, 12),
+      ],
+    }
+    expect(
+      validPlay({ play, playerIndex: 1 }, { play: prevPlay, playerIndex: 1 }),
+    ).to.be.true
+  })
+  it('validPlay negative combo value smaller', () => {
     const prevPlay = {
       combo: Hand.STRAIGHT,
       comboValue: newCard(Suit.CLUB, 1),
@@ -458,7 +479,34 @@ describe('play.ts', () => {
       validPlay({ play, playerIndex: 1 }, { play: prevPlay, playerIndex: 0 }),
     ).to.be.false
   })
-  it('validPlay positive', () => {
+  it('validPlay positive combo value smaller but same player', () => {
+    const prevPlay = {
+      combo: Hand.STRAIGHT,
+      comboValue: newCard(Suit.CLUB, 1),
+      cards: [
+        newCard(Suit.CLUB, 11),
+        newCard(Suit.CLUB, 1),
+        newCard(Suit.SPADE, 13),
+        newCard(Suit.HEART, 10),
+        newCard(Suit.DIAMOND, 12),
+      ],
+    }
+    const play = {
+      combo: Hand.STRAIGHT,
+      comboValue: newCard(Suit.DIAMOND, 1),
+      cards: [
+        newCard(Suit.CLUB, 11),
+        newCard(Suit.DIAMOND, 1),
+        newCard(Suit.SPADE, 13),
+        newCard(Suit.HEART, 10),
+        newCard(Suit.DIAMOND, 12),
+      ],
+    }
+    expect(
+      validPlay({ play, playerIndex: 1 }, { play: prevPlay, playerIndex: 1 }),
+    ).to.be.true
+  })
+  it('validPlay positive bigger value combo', () => {
     const prevPlay = {
       combo: Hand.STRAIGHT,
       comboValue: newCard(Suit.CLUB, 1),

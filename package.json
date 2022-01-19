@@ -1,5 +1,5 @@
 {
-  "name": "bigtwo",
+  "name": "@sqooid/bigtwo",
   "version": "1.0.0",
   "description": "Run Big Two games",
   "main": "dist/index.js",
@@ -29,7 +29,6 @@
     "@types/rewire": "^2.5.28",
     "@typescript-eslint/eslint-plugin": "^5.9.1",
     "@typescript-eslint/parser": "^5.9.1",
-    "bigtwo": "^1.0.0",
     "chai": "^4.3.4",
     "eslint": "^8.6.0",
     "eslint-config-prettier": "^8.3.0",
