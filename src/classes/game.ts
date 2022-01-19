@@ -55,8 +55,8 @@ export class Game {
   }
 
   /**
-   * Deals cards to players as fresh game
-   * @param options Deal Options
+   * Clears any current state and deals cards to players with options
+   * @param options Deal options
    */
   dealCards(options: DealOptions) {
     this.clear()
@@ -108,26 +108,73 @@ export class Game {
   }
 
   /**
-   * If index is out of bounds, undefined is returned
-   * @param index Player index
-   * @returns Player with that index
+   * Getters
    */
-  getPlayer(index: number): Player | undefined {
-    return this._state.players[index]
+
+  /**
+   * Gets the array of all the current players
+   * Can be indexed to get specific players
+   */
+  get players(): Player[] {
+    return this._state.players
   }
 
-  getWinner(): number | undefined {
+  get playerCount(): number {
+    return this._state.players.length
+  }
+
+  /**
+   * The current turn number
+   */
+  get turn(): number {
+    return this._state.turn
+  }
+
+  /**
+   * The index of the player who is to make the next play
+   */
+  get currentPlayer(): number {
+    return this._state.turnIndex
+  }
+
+  /**
+   * Gets the current state of the board
+   */
+  get board(): BoardPlay[] {
+    return this._state.board
+  }
+
+  /**
+   * Gives the index of the winner of the game
+   * Could also be used to check if the game is finished or not
+   */
+  get winner(): number | undefined {
     if (!this._finished) return undefined
     const board = this._state.board
     return board[board.length - 1].playerIndex
   }
+
+  /**
+   * Check if game is finished, i.e. if there is a winner
+   */
+  get isFinished(): boolean {
+    return this._finished
+  }
 }
 
+/**
+ * Utility to ticks the turn numbers of the provided state
+ * @param state State to update
+ */
 function _tickBoard(state: State) {
   ++state.turn
   state.turnIndex = (state.turnIndex + 1) % state.players.length
 }
 
+/**
+ * Creates a new Big Two game instance
+ * @returns A new empty game
+ */
 export function createGame(): Game {
   return new Game()
 }

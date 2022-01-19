@@ -102,7 +102,7 @@ export function removeCards(cards: Card[], cardList: Card[]): Card[] {
   return cardList
 }
 
-export function newCard(suit: Suit, value: number) {
+export function newCard(suit: Suit, value: number): Card {
   if (value < 1 || value > 13) throw new Error('invalid card creation')
   return { suit, value }
 }

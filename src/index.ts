@@ -1,5 +1,5 @@
 // game
-export { BoardPlay, State, Game, createGame } from '@/classes/game'
+export { BoardPlay, Game, createGame } from '@/classes/game'
 
 // deck
 export {

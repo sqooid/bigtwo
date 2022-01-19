@@ -60,12 +60,13 @@ export function validPlay(
 }
 
 /**
- * Compares two plays. Doesn't check number of cards
+ * Compares two plays to see if a play can be made due to greater value
  * @param play1
  * @param play2
  * @returns True if play1 beats play2, false otherwise
  */
 export function playGreater(play1: Play, play2: Play): boolean {
+  if (play1.cards.length !== play2.cards.length) return false
   if (play1.combo > play2.combo) return true
   if (play1.combo < play2.combo) return false
   // Same combo

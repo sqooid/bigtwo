@@ -27,11 +27,13 @@ export interface DealOptions {
 }
 
 /**
- * Deals full deck
+ * Deals cards according to specified options
+ * If options are invalid, returns undefined
  * @param options
  * @returns
  */
 export function deal(options: DealOptions): Card[][] {
+  if (options.playerCount < 2 || options.playerCount > 4) return undefined
   const deck = createDeck()
   let hands
   while (true) {
