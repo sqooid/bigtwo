@@ -12,7 +12,7 @@ import {
   isStraightFlush,
   isTriple,
   playGreater,
-  validPlay,
+  beatsPlay,
 } from '@/interfaces/play'
 import { expect } from 'chai'
 
@@ -427,7 +427,7 @@ describe('play.ts', () => {
         newCard(Suit.DIAMOND, 12),
       ],
     }
-    expect(validPlay(play, prevPlay)).to.be.false
+    expect(beatsPlay(play, prevPlay)).to.be.false
   })
   it('validPlay negative value difference', () => {
     const prevPlay = {
@@ -452,7 +452,7 @@ describe('play.ts', () => {
         newCard(Suit.DIAMOND, 12),
       ],
     }
-    expect(validPlay(play, prevPlay)).to.be.false
+    expect(beatsPlay(play, prevPlay)).to.be.false
   })
   it('validPlay positive', () => {
     const prevPlay = {
@@ -477,7 +477,7 @@ describe('play.ts', () => {
         newCard(Suit.DIAMOND, 12),
       ],
     }
-    expect(validPlay(play, prevPlay)).to.be.true
+    expect(beatsPlay(play, prevPlay)).to.be.true
   })
   it('validPlay positive no previous', () => {
     const play = {
@@ -491,7 +491,7 @@ describe('play.ts', () => {
         newCard(Suit.DIAMOND, 12),
       ],
     }
-    expect(validPlay(play)).to.be.true
+    expect(beatsPlay(play)).to.be.true
   })
   it('clonePlay', () => {
     let clone

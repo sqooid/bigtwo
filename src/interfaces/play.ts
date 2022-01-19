@@ -1,3 +1,4 @@
+import { BoardPlay } from '@/classes/game'
 import { Card, cardGreater, nextValue, sortCards } from '@/interfaces/deck'
 
 export enum Hand {
@@ -30,8 +31,30 @@ export function clonePlay(play: Play): Play {
   }
 }
 
-export function validPlay(play: Play, prevPlay?: Play): boolean {
-  if (!findPlay(play.cards)) return false
+/**
+ * Checks if a potential play is valid given previous play
+ * Takes into account all factors
+ * @param boardPlay
+ * @param prevBoardPlay
+ * @returns True if valid, false otherwise
+ */
+export function validPlay(
+  boardPlay: BoardPlay,
+  prevBoardPlay: BoardPlay,
+): boolean {
+  if (!prevBoardPlay) return true
+  if (!findPlay(boardPlay.play.cards)) return false
+  if (prevBoardPlay.playerIndex === boardPlay.playerIndex) return true
+  return beatsPlay(boardPlay.play, prevBoardPlay.play)
+}
+
+/**
+ * Does not check if play cards are actually valid
+ * @param play
+ * @param prevPlay
+ * @returns
+ */
+export function beatsPlay(play: Play, prevPlay?: Play): boolean {
   if (!prevPlay) return true
   if (play.cards.length !== prevPlay.cards.length) return false
   return playGreater(play, prevPlay)

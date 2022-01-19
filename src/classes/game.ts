@@ -1,9 +1,9 @@
 import { Player } from '@/interfaces/player'
-import { clonePlay, Play, validPlay } from '@/interfaces/play'
+import { clonePlay, Play, beatsPlay, validPlay } from '@/interfaces/play'
 import { deal, DealOptions } from '@/utils/deal'
 import { containsCards, removeCards } from '@/interfaces/deck'
 
-interface BoardPlay {
+export interface BoardPlay {
   playerIndex: number
   play: Play
 }
@@ -70,7 +70,7 @@ export class Game {
     const board = this._state.board
     const prevPlay: BoardPlay | undefined = board[board.length - 1]
 
-    if (validPlay(play, prevPlay?.play) || prevPlay.playerIndex === turnIndex) {
+    if (validPlay({ play, playerIndex: turnIndex }, prevPlay)) {
       // Tick state
       removeCards(play.cards, player.cards)
       const playClone = clonePlay(play)
