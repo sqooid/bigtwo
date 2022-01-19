@@ -147,6 +147,201 @@ describe('game.ts', () => {
 
     expect(res).to.be.true && expect(game._state, 'state').to.eql(expectedState)
   })
+  it('makePlay positive with previous play by other player', () => {
+    const game = createGame()
+    game._state.players = [
+      {
+        cards: [
+          newCard(Suit.CLUB, 11),
+          newCard(Suit.HEART, 1),
+          newCard(Suit.SPADE, 13),
+          newCard(Suit.HEART, 10),
+          newCard(Suit.DIAMOND, 11),
+          newCard(Suit.DIAMOND, 12),
+        ],
+      },
+      {
+        cards: [newCard(Suit.CLUB, 11)],
+      },
+      {
+        cards: [newCard(Suit.CLUB, 11)],
+      },
+      {
+        cards: [newCard(Suit.CLUB, 11)],
+      },
+    ]
+    const play = findPlay([
+      newCard(Suit.CLUB, 11),
+      newCard(Suit.HEART, 1),
+      newCard(Suit.SPADE, 13),
+      newCard(Suit.HEART, 10),
+      newCard(Suit.DIAMOND, 12),
+    ])
+    const prevPlay = findPlay([
+      newCard(Suit.CLUB, 11),
+      newCard(Suit.CLUB, 1),
+      newCard(Suit.SPADE, 13),
+      newCard(Suit.HEART, 10),
+      newCard(Suit.DIAMOND, 12),
+    ])
+
+    game._state.board = [
+      {
+        playerIndex: 3,
+        play: prevPlay,
+      },
+    ]
+    const res = game.makePlay(play)
+
+    const expectedState: State = {
+      turn: 1,
+      turnIndex: 1,
+      board: [
+        { playerIndex: 3, play: prevPlay },
+        { play, playerIndex: 0 },
+      ],
+      players: [
+        {
+          cards: [newCard(Suit.DIAMOND, 11)],
+        },
+        {
+          cards: [newCard(Suit.CLUB, 11)],
+        },
+        {
+          cards: [newCard(Suit.CLUB, 11)],
+        },
+        {
+          cards: [newCard(Suit.CLUB, 11)],
+        },
+      ],
+    }
+
+    expect(res).to.be.true && expect(game._state, 'state').to.eql(expectedState)
+  })
+  it('makePlay positive with previous play by same player', () => {
+    const game = createGame()
+    game._state.players = [
+      {
+        cards: [
+          newCard(Suit.CLUB, 11),
+          newCard(Suit.HEART, 1),
+          newCard(Suit.SPADE, 13),
+          newCard(Suit.HEART, 10),
+          newCard(Suit.DIAMOND, 11),
+          newCard(Suit.DIAMOND, 12),
+        ],
+      },
+      {
+        cards: [newCard(Suit.CLUB, 11)],
+      },
+      {
+        cards: [newCard(Suit.CLUB, 11)],
+      },
+      {
+        cards: [newCard(Suit.CLUB, 11)],
+      },
+    ]
+    const play = findPlay([newCard(Suit.CLUB, 11)])
+    const prevPlay = findPlay([
+      newCard(Suit.CLUB, 11),
+      newCard(Suit.CLUB, 1),
+      newCard(Suit.SPADE, 13),
+      newCard(Suit.HEART, 10),
+      newCard(Suit.DIAMOND, 12),
+    ])
+
+    game._state.board = [
+      {
+        playerIndex: 0,
+        play: prevPlay,
+      },
+    ]
+    const res = game.makePlay(play)
+
+    const expectedState: State = {
+      turn: 1,
+      turnIndex: 1,
+      board: [
+        { play: prevPlay, playerIndex: 0 },
+        { play, playerIndex: 0 },
+      ],
+      players: [
+        {
+          cards: [
+            newCard(Suit.HEART, 1),
+            newCard(Suit.SPADE, 13),
+            newCard(Suit.HEART, 10),
+            newCard(Suit.DIAMOND, 11),
+            newCard(Suit.DIAMOND, 12),
+          ],
+        },
+        {
+          cards: [newCard(Suit.CLUB, 11)],
+        },
+        {
+          cards: [newCard(Suit.CLUB, 11)],
+        },
+        {
+          cards: [newCard(Suit.CLUB, 11)],
+        },
+      ],
+    }
+
+    expect(res).to.be.true && expect(game._state, 'state').to.eql(expectedState)
+  })
+  it('makePlay negative with smaller play', () => {
+    const game = createGame()
+    game._state.players = [
+      {
+        cards: [
+          newCard(Suit.CLUB, 11),
+          newCard(Suit.HEART, 1),
+          newCard(Suit.SPADE, 13),
+          newCard(Suit.HEART, 10),
+          newCard(Suit.DIAMOND, 11),
+          newCard(Suit.DIAMOND, 12),
+        ],
+      },
+      {
+        cards: [newCard(Suit.CLUB, 11)],
+      },
+      {
+        cards: [newCard(Suit.CLUB, 11)],
+      },
+      {
+        cards: [newCard(Suit.CLUB, 11)],
+      },
+    ]
+
+    const play = findPlay([
+      newCard(Suit.CLUB, 11),
+      newCard(Suit.HEART, 1),
+      newCard(Suit.SPADE, 13),
+      newCard(Suit.HEART, 10),
+      newCard(Suit.DIAMOND, 12),
+    ])
+    const prevPlay = findPlay([
+      newCard(Suit.CLUB, 11),
+      newCard(Suit.SPADE, 1),
+      newCard(Suit.SPADE, 13),
+      newCard(Suit.HEART, 10),
+      newCard(Suit.DIAMOND, 12),
+    ])
+
+    game._state.board = [
+      {
+        playerIndex: 3,
+        play: prevPlay,
+      },
+    ]
+
+    const expectedState = JSON.parse(JSON.stringify(game._state))
+
+    const res = game.makePlay(play)
+
+    expect(res).to.be.false &&
+      expect(game._state, 'state').to.eql(expectedState)
+  })
   it('makePlay winning', () => {
     const game = createGame()
     game._state.players = [
