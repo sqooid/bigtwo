@@ -1,5 +1,5 @@
 import { Player } from '@/interfaces/player'
-import { clonePlay, Play, beatsPlay, validPlay } from '@/interfaces/play'
+import { clonePlay, Play, validPlay } from '@/interfaces/play'
 import { deal, DealOptions } from '@/utils/deal'
 import { containsCards, removeCards } from '@/interfaces/deck'
 

@@ -33,31 +33,21 @@ export function clonePlay(play: Play): Play {
 
 /**
  * Checks if a potential play is valid given previous play
- * Takes into account all factors
- * @param boardPlay
- * @param prevBoardPlay
+ * Takes into account combo validity, who played last hand and combo value
+ * @param boardPlay Current potential play
+ * @param prevBoardPlay Previous play
  * @returns True if valid, false otherwise
  */
 export function validPlay(
   boardPlay: BoardPlay,
-  prevBoardPlay: BoardPlay,
+  prevBoardPlay?: BoardPlay,
 ): boolean {
-  if (!prevBoardPlay) return true
   if (!findPlay(boardPlay.play.cards)) return false
+  if (!prevBoardPlay) return true
   if (prevBoardPlay.playerIndex === boardPlay.playerIndex) return true
-  return beatsPlay(boardPlay.play, prevBoardPlay.play)
-}
-
-/**
- * Does not check if play cards are actually valid
- * @param play
- * @param prevPlay
- * @returns
- */
-export function beatsPlay(play: Play, prevPlay?: Play): boolean {
-  if (!prevPlay) return true
-  if (play.cards.length !== prevPlay.cards.length) return false
-  return playGreater(play, prevPlay)
+  if (boardPlay.play.cards.length !== prevBoardPlay.play.cards.length)
+    return false
+  return playGreater(boardPlay.play, prevBoardPlay.play)
 }
 
 /**
