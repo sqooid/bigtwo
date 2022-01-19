@@ -1,5 +1,75 @@
 # Big Two Engine API
 
+## Classes
+
+### Game
+
+```ts
+class Game {
+  /**
+   * Clears all existing state
+   */
+  clear()
+
+  /**
+   * Clears any current state and deals cards to players with options
+   * @param options Deal options
+   */
+  dealCards(options: DealOptions)
+
+  /**
+   * Makes play and advances turn if play was valid, no change otherwise
+   * Sets winner if play results in player having no cards left
+   * @param play Play to make, with sorted cards. Pass if undefined
+   * @returns True if play was valid, false if invalid play
+   */
+  makePlay(play?: Play): boolean
+
+  /**
+   * Getters
+   */
+
+  /**
+   * Gets the array of all the current players
+   * Can be indexed to get specific players
+   */
+  get players(): Player[]
+
+  /**
+   * Number of players
+   */
+  get playerCount(): number
+
+  /**
+   * The current turn number
+   */
+  get turn(): number {
+    return this._state.turn
+  }
+
+  /**
+   * The index of the player who is to make the next play
+   */
+  get currentPlayer(): number
+
+  /**
+   * Gets the current state of the board
+   */
+  get board(): BoardPlay[]
+
+  /**
+   * Gives the index of the winner of the game
+   * Could also be used to check if the game is finished or not
+   */
+  get winner(): number | undefined
+
+  /**
+   * Check if game is finished, i.e. if there is a winner
+   */
+  get isFinished(): boolean
+}
+```
+
 ## Functions
 
 ### createGame
@@ -76,18 +146,22 @@ interface DealOptions {
    * Number of players
    */
   playerCount: number
+
   /**
    * First player isn't guaranteed to hold diamond 3
    */
   randomHands?: boolean
+
   /**
    * Reshuffle if any player holds all two's
    */
   fourTwos?: boolean
+
   /**
    * Reshuffle if any player has no face cards
    */
   noFaces?: boolean
+
   /**
    * Distribute all cards if less than four players
    */
@@ -114,10 +188,12 @@ interface Play {
    * The type of the combo
    */
   combo: Hand
+
   /**
    * The card used to determine the value of the combo
    */
   comboValue: Card
+
   /**
    * The cards making up the play
    */
@@ -133,6 +209,7 @@ interface BoardPlay {
    * Index of the player that made this play
    */
   playerIndex: number
+
   /**
    * The play that was made
    */

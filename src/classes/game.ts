@@ -119,6 +119,9 @@ export class Game {
     return this._state.players
   }
 
+  /**
+   * Number of players
+   */
   get playerCount(): number {
     return this._state.players.length
   }
