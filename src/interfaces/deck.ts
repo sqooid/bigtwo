@@ -17,6 +17,7 @@ export interface Card {
  * @returns True if cards are identical, false otherwise
  */
 export function cardsEqual(card1: Card, card2: Card): boolean {
+  if (card1 === card2) return true // Shortcut for if they are same instance
   return card1.suit === card2.suit && card1.value === card2.value
 }
 
