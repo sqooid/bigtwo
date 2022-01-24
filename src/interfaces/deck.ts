@@ -69,15 +69,14 @@ export function sortCards(cards: Card[], bySuits?: boolean): Card[] {
       if (cardGreater(a, b)) return 1
       return -1
     })
-    return cards
   } else {
     cards.sort((a, b) => {
       if (a.suit < b.suit) return -1
       if (a.suit === b.suit && cardValueGreater(b.value, a.value)) return -1
       return 1
     })
-    return cards
   }
+  return cards
 }
 
 /**

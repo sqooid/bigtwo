@@ -55,12 +55,13 @@ export class Game {
   }
 
   /**
-   * Clears any current state and deals cards to players with options
+   * Clears any current state and deals cards to players with options. Doesn't do anything if number of players is invalid
    * @param options Deal options
    */
   dealCards(options: DealOptions) {
     this.clear()
     const hands = deal(options)
+    if (hands === undefined) return
     for (const hand of hands) {
       this._state.players.push({ cards: hand })
     }

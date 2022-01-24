@@ -32,7 +32,7 @@ export interface DealOptions {
  * @param options
  * @returns
  */
-export function deal(options: DealOptions): Card[][] {
+export function deal(options: DealOptions): Card[][] | undefined {
   if (options.playerCount < 2 || options.playerCount > 4) return undefined
   const deck = createDeck()
   let hands
