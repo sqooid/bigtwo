@@ -1,7 +1,7 @@
 import { Player } from '@/interfaces/player'
 import { clonePlay, Play, validPlay } from '@/interfaces/play'
 import { deal, DealOptions } from '@/utils/deal'
-import { containsCards, removeCards } from '@/interfaces/deck'
+import { containsCards, removeCards, sortCards } from '@/interfaces/deck'
 
 export interface BoardPlay {
   /**
@@ -63,7 +63,7 @@ export class Game {
     const hands = deal(options)
     if (hands === undefined) return
     for (const hand of hands) {
-      this._state.players.push({ cards: hand })
+      this._state.players.push({ cards: sortCards(hand) })
     }
   }
 
