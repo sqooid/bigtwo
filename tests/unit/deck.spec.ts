@@ -5,6 +5,7 @@ import {
   containsCards,
   newCard,
   removeCards,
+  sortCards,
   Suit,
 } from '@/interfaces/deck'
 import { expect } from 'chai'
@@ -121,5 +122,48 @@ describe('deck.ts', () => {
       newCard(Suit.HEART, 12),
       newCard(Suit.DIAMOND, 1),
     ])
+  })
+})
+
+describe('sortCards', () => {
+  it('works when sorting by value', () => {
+    const cards = [
+      newCard(Suit.DIAMOND, 5),
+      newCard(Suit.SPADE, 2),
+      newCard(Suit.HEART, 1),
+      newCard(Suit.CLUB, 5),
+      newCard(Suit.DIAMOND, 3),
+      newCard(Suit.SPADE, 1),
+    ]
+    const sorted = [
+      newCard(Suit.DIAMOND, 3),
+      newCard(Suit.DIAMOND, 5),
+      newCard(Suit.CLUB, 5),
+      newCard(Suit.HEART, 1),
+      newCard(Suit.SPADE, 1),
+      newCard(Suit.SPADE, 2),
+    ]
+    sortCards(cards)
+    expect(cards).to.eql(sorted)
+  })
+  it('works when sorting by suit', () => {
+    const cards = [
+      newCard(Suit.DIAMOND, 5),
+      newCard(Suit.SPADE, 2),
+      newCard(Suit.HEART, 1),
+      newCard(Suit.CLUB, 5),
+      newCard(Suit.DIAMOND, 3),
+      newCard(Suit.DIAMOND, 1),
+    ]
+    const sorted = [
+      newCard(Suit.DIAMOND, 3),
+      newCard(Suit.DIAMOND, 5),
+      newCard(Suit.DIAMOND, 1),
+      newCard(Suit.CLUB, 5),
+      newCard(Suit.HEART, 1),
+      newCard(Suit.SPADE, 2),
+    ]
+    sortCards(cards, true)
+    expect(cards).to.eql(sorted)
   })
 })

@@ -63,12 +63,21 @@ export function cardGreater(card1: Card, card2: Card): boolean {
  * @param cards
  * @returns
  */
-export function sortCards(cards: Card[]): Card[] {
-  cards.sort((a, b) => {
-    if (cardGreater(a, b)) return 1
-    return -1
-  })
-  return cards
+export function sortCards(cards: Card[], bySuits?: boolean): Card[] {
+  if (!bySuits) {
+    cards.sort((a, b) => {
+      if (cardGreater(a, b)) return 1
+      return -1
+    })
+    return cards
+  } else {
+    cards.sort((a, b) => {
+      if (a.suit < b.suit) return -1
+      if (a.suit === b.suit && cardValueGreater(b.value, a.value)) return -1
+      return 1
+    })
+    return cards
+  }
 }
 
 /**
