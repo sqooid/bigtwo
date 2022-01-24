@@ -75,7 +75,7 @@ export class Game {
    */
   makePlay(play?: Play): boolean {
     if (this._finished) return false
-    if (!play) {
+    if (play === undefined) {
       _tickBoard(this._state)
       return true
     }
