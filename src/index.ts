@@ -9,6 +9,10 @@ export {
   newCard,
   cardGreater,
   cardsEqual,
+  getCardName,
+  getCardSuitName,
+  getCardValueName,
+  getComboName,
 } from '@/interfaces/deck'
 
 // player

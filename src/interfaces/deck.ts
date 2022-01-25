@@ -111,7 +111,108 @@ export function removeCards(cards: Card[], cardList: Card[]): Card[] {
   return cardList
 }
 
+/**
+ * Create a new card. Throws error if invalid card
+ * @param suit
+ * @param value
+ * @returns
+ */
 export function newCard(suit: Suit, value: number): Card {
   if (value < 1 || value > 13) throw new Error('invalid card creation')
   return { suit, value }
+}
+
+/**
+ * Get string name of combo
+ * @param index
+ * @returns Empty string if invalid combo index
+ */
+export function getComboName(index: number): string {
+  switch (index) {
+    case 0:
+      return 'Single'
+    case 1:
+      return 'Pair'
+    case 2:
+      return 'Triple'
+    case 3:
+      return 'Sraight'
+    case 4:
+      return 'Flush'
+    case 5:
+      return 'Full House'
+    case 6:
+      return 'Four of a Kind'
+    case 7:
+      return 'Straight Flush'
+  }
+  return ''
+}
+
+/**
+ * Get string name of card
+ * @param card
+ * @returns Empty string if card is invalid
+ */
+export function getCardName(card: Card): string {
+  const valueString = getCardValueName(card.value)
+  const suitString = getCardSuitName(card.suit)
+  if (!valueString || !suitString) return ''
+  return `${valueString} of ${suitString}s`
+}
+
+/**
+ * Get string name of card value
+ * @param value
+ * @returns Empty string if invalid
+ */
+export function getCardValueName(value: number): string {
+  switch (value) {
+    case 1:
+      return 'Ace'
+    case 2:
+      return 'Two'
+    case 3:
+      return 'Three'
+    case 4:
+      return 'Four'
+    case 5:
+      return 'Five'
+    case 6:
+      return 'Six'
+    case 7:
+      return 'Seven'
+    case 8:
+      return 'Eight'
+    case 9:
+      return 'Nine'
+    case 10:
+      return 'Ten'
+    case 11:
+      return 'Jack'
+    case 12:
+      return 'Queen'
+    case 13:
+      return 'King'
+  }
+  return ''
+}
+
+/**
+ * Get string name of suit given index
+ * @param value
+ * @returns Empty string if invalid
+ */
+export function getCardSuitName(value: number): string {
+  switch (value) {
+    case Suit.DIAMOND:
+      return 'Diamond'
+    case Suit.CLUB:
+      return 'Club'
+    case Suit.HEART:
+      return 'Heart'
+    case Suit.SPADE:
+      return 'Spade'
+  }
+  return ''
 }

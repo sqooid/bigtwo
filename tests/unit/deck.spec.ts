@@ -3,6 +3,9 @@ import {
   cardsEqual,
   cardValueGreater,
   containsCards,
+  getCardName,
+  getCardSuitName,
+  getCardValueName,
   newCard,
   removeCards,
   sortCards,
@@ -165,5 +168,20 @@ describe('sortCards', () => {
     ]
     sortCards(cards, true)
     expect(cards).to.eql(sorted)
+  })
+})
+
+describe('Getting card string names', () => {
+  it('gives correct value', () => {
+    const valueString = getCardValueName(1)
+    expect(valueString).to.equal('Ace')
+  })
+  it('gives correct suit', () => {
+    const suitString = getCardSuitName(2)
+    expect(suitString).to.equal('Heart')
+  })
+  it('gives correct card name', () => {
+    const cardString = getCardName(newCard(Suit.SPADE, 13))
+    expect(cardString).to.equal('King of Spades')
   })
 })
