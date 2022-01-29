@@ -136,7 +136,7 @@ export function getComboName(index: number): string {
     case 2:
       return 'Triple'
     case 3:
-      return 'Sraight'
+      return 'Straight'
     case 4:
       return 'Flush'
     case 5:
